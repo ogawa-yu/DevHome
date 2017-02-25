@@ -9,6 +9,6 @@ net.createServer(function(socket) {
     socket.write('This is RLS Texh News Echo Server\r\n');
     // データを受信したら、そのままメッセージとして送出
     socket.on('data', function(data) {
-        socket.write(data)
+        socket.write('Server->response:' + data)
     });
 }).listen(1337, '127.0.0.1');
