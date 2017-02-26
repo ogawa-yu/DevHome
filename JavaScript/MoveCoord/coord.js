@@ -5,6 +5,12 @@ function clone(obj) {
     return new f;
 }
 
+function compose(f, g) {
+    return function(x) {
+        return f(g(x));
+    }
+}
+
 var trans = function(dx,dy,coord) {
     var result = clone(coord);
     result.x += dx;
