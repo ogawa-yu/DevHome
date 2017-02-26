@@ -12,12 +12,26 @@ var trans = function(dx,dy,coord) {
     return result;
 }
 
+var rotate = function(theta, coord) {
+    var result = clone(coord);
+    result.x = coord.x * Math.cos(theta) - coord.y * Math.sin(theta);
+    result.y = coord.x * Math.sin(theta) + coord.y * Math.cos(theta);
+    return result;
+}
+
 var transByConfig = function(condig, coord) {
     return trans(config.offsetX, config.offsetY, coord);
 }
 
+var rotateByConfig = function(config, coord) {
+    var preTrans    = trans(-config.rotAt.x, -config.rotAt.y, coord);
+    var rotated     = rotate(config.theta, preTrans);
+    var postTrans   = trans(config.rotAt.x, config.rotAt.y, rotated);
+    return postTrans;
+}
+
 var convertByConfig = function(config, coord) {
-    return transByConfig(config, coord);
+    return transByConfig(config, rotateByConfig(config, coord));
 }
 
 var config = {
@@ -25,9 +39,9 @@ var config = {
         'x' : 0.5,
         'y' : 0.5,
         },
-    'theta' : Math.PI / 4,
-    'offsetX' : 1.0,
-    'offsetY' : 1.0
+    'theta' : Math.PI / 2,
+    'offsetX' : -0.5,
+    'offsetY' : -0.5
 };
 
 var unit_rect = [
