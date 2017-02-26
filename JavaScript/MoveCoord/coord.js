@@ -39,7 +39,7 @@ var config = {
         'x' : 0.5,
         'y' : 0.5,
         },
-    'theta' : Math.PI / 2,
+    'theta' : Math.PI / 4,
     'offsetX' : -0.5,
     'offsetY' : -0.5
 };
