@@ -80,3 +80,8 @@ popMaybe :: Num a =>  Maybe a -> a
 popMaybe Nothing  = 0
 popMaybe (Just a) = a
 
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _          = []
+zipWith' _ _ []          = []
+zipWith' f (a:as) (b:bs) = f a b : zipWith' f as bs
+
