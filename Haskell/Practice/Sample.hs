@@ -18,7 +18,7 @@ maybeToList (Just a) = [a]
 
 listToMaybe :: [a] -> Maybe a
 listToMaybe [] = Nothing
-listToMaybe (a:as) = Just a
+listToMaybe (a:_) = Just a
 
 deeping :: String -> String
 deeping []             = []
@@ -47,7 +47,7 @@ safeSqrt x
 
 caseOfFirstLetter :: String -> String
 caseOfFirstLetter "" = "empty" -- 空文字列にパターンマッチ
-caseOfFirstLetter (x:xs)
+caseOfFirstLetter (x:_)
     | 'a' <= x && x <= 'z' = "lower"
     | 'A' <= x && x <= 'Z' = "upper"
     | otherwise            = "other"
