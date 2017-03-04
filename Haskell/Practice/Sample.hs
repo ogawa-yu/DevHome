@@ -22,8 +22,12 @@ listToMaybe (a:as) = Just a
 
 deeping :: String -> String
 deeping []             = []
-deeping ('\t':xs)      = "    " ++ deeping xs
-deeping (s:xs)         = [s] ++ deeping xs
+--deeping ('\t':xs)      = "    " ++ deeping s
+--deeping (s:xs)         = [s] ++ deeping xs
+-- asパターン
+deeping s@(' ':' ':_) = " " ++ s
+deeping s@(' ':_)     = " " ++ s
+deeping s              = s
 
 -- よくないパターンマッチの例
 -- 網羅的に定義できていない。
