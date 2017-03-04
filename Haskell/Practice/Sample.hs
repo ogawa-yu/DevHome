@@ -66,3 +66,13 @@ fib n
     | n < 2 = 1
     | otherwise = fib (n - 1) + fib (n - 2)
 
+ins :: Ord a => a -> [a] -> [a]
+ins e [] = [e] -- 空リストへの挿入は無条件
+ins e (x:xs)
+    | e < x     = e : x : xs   -- 先頭の値より小さければ先頭へ
+    | otherwise = x : ins e xs -- 先頭より大きければ残りの部分で挿入
+
+insSort :: Ord a => [a] -> [a]
+insSort [] = []
+insSort (x:xs) = ins x (insSort xs)
+
