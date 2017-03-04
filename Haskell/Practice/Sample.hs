@@ -76,3 +76,7 @@ insSort :: Ord a => [a] -> [a]
 insSort [] = []
 insSort (x:xs) = ins x (insSort xs)
 
+popMaybe :: Num a =>  Maybe a -> a
+popMaybe Nothing  = 0
+popMaybe (Just a) = a
+
