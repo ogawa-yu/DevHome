@@ -39,3 +39,16 @@ deeping s              = s
 --nonExhaustive 0 = 0
 --nonExhaustive 1 = 1
 --nonExhaustive 2 = 2
+
+safeSqrt :: (Ord a, Floating a) => a -> Maybe a
+safeSqrt x
+    | x < 0 = Nothing
+    | otherwise = Just (sqrt x)
+
+caseOfFirstLetter :: String -> String
+caseOfFirstLetter "" = "empty" -- 空文字列にパターンマッチ
+caseOfFirstLetter (x:xs)
+    | 'a' <= x && x <= 'z' = "lower"
+    | 'A' <= x && x <= 'Z' = "upper"
+    | otherwise            = "other"
+
