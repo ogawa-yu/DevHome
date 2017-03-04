@@ -60,4 +60,9 @@ caseOfFirstLetter str =
                   then "upper"
                   else "other"
 
+fib :: Int -> Int
+fib n
+    | n < 0 = 0
+    | n < 2 = 1
+    | otherwise = fib (n - 1) + fib (n - 2)
 
