@@ -46,9 +46,18 @@ safeSqrt x
     | otherwise = Just (sqrt x)
 
 caseOfFirstLetter :: String -> String
-caseOfFirstLetter "" = "empty" -- 空文字列にパターンマッチ
-caseOfFirstLetter (x:_)
-    | 'a' <= x && x <= 'z' = "lower"
-    | 'A' <= x && x <= 'Z' = "upper"
-    | otherwise            = "other"
+--caseOfFirstLetter "" = "empty" -- 空文字列にパターンマッチ
+--caseOfFirstLetter (x:_)
+--    | 'a' <= x && x <= 'z' = "lower"
+--    | 'A' <= x && x <= 'Z' = "upper"
+--    | otherwise            = "other"
+caseOfFirstLetter str = 
+    case str of
+    ""    -> ""
+    (x:_) -> if 'a' <= x && x <= 'z'
+             then "lower"
+             else if 'A' <= x && x <= 'Z'
+                  then "upper"
+                  else "other"
+
 
