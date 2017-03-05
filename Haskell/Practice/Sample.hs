@@ -85,3 +85,5 @@ zipWith' _ [] _          = []
 zipWith' _ _ []          = []
 zipWith' f (a:as) (b:bs) = f a b : zipWith' f as bs
 
+mean :: [Double] -> Double
+mean xs = sum xs / fromIntegral (length xs)
