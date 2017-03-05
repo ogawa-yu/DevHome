@@ -85,5 +85,14 @@ zipWith' _ [] _          = []
 zipWith' _ _ []          = []
 zipWith' f (a:as) (b:bs) = f a b : zipWith' f as bs
 
+foldr' :: (a -> b -> b) -> b -> [a] -> b
+foldr' _ e []     = e
+foldr' f e (x:xs) = f x (foldr' f e xs)
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr' ((:).f) []
 mean :: [Double] -> Double
-mean xs = sum xs / fromIntegral (length xs)
+-- mean xs = sum xs / fromIntegral (length xs)
+mean xs = let (res, len) = foldl (\(m, n) x -> 
+                           (m + x / len, n + 1)) (0,0) xs in res
+
