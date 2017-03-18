@@ -96,3 +96,12 @@ mean :: [Double] -> Double
 mean xs = let (res, len) = foldl (\(m, n) x -> 
                            (m + x / len, n + 1)) (0,0) xs in res
 
+isJust :: Maybe a -> Bool
+isJust Nothing  = False
+isJust (Just _) = True
+
+total :: Num a => [a] -> a
+total xs = total' 0 xs where
+    total' acc [] = acc
+    total' acc (x:xs) = total' (acc + x) xs
+
