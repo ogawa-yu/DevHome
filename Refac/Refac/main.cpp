@@ -73,5 +73,5 @@ int main(int argc, const char * argv[]) {
     //coord_t points[10];
     //coord_t result[10];
     // map_to_coords(/*ここで、変換関数を自由に作り出したいんだけど。。。*/, 10, result, points);
-    return 0;
+    return  0;
 }

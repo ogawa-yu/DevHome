@@ -100,8 +100,9 @@ isJust :: Maybe a -> Bool
 isJust Nothing  = False
 isJust (Just _) = True
 
+-- total'を積極評価に変更
 total :: Num a => [a] -> a
 total xs = total' 0 xs where
-    total' acc [] = acc
-    total' acc (x:xs) = total' (acc + x) xs
+    total' !acc [] = acc
+    total' !acc (x:xs) = total' (acc + x) xs
 
