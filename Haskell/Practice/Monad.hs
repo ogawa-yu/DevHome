@@ -44,3 +44,14 @@ squareRoot n
             | n < x * x = Nothing
             | otherwise = Just x
 
+squareAndSquareRoot1 :: Integer -> Maybe Integer
+squareAndSquareRoot1 n = case square n of
+                Nothing -> Nothing
+                Just nn -> squareRoot nn
+
+squareAndSquareRoot2 :: Integer -> Integer -> Maybe Integer
+squareAndSquareRoot2 m n = case square m of
+                Nothing -> Nothing
+                Just mm -> case square n of
+                    Nothing -> Nothing
+                    Just nn -> squareRoot (mm * nn)
