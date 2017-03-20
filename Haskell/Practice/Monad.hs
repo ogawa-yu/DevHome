@@ -45,13 +45,12 @@ squareRoot n
             | otherwise = Just x
 
 squareAndSquareRoot1 :: Integer -> Maybe Integer
-squareAndSquareRoot1 n = case square n of
-                Nothing -> Nothing
-                Just nn -> squareRoot nn
+squareAndSquareRoot1 n = do
+                nn <- square n
+                squareRoot nn
 
 squareAndSquareRoot2 :: Integer -> Integer -> Maybe Integer
-squareAndSquareRoot2 m n = case square m of
-                Nothing -> Nothing
-                Just mm -> case square n of
-                    Nothing -> Nothing
-                    Just nn -> squareRoot (mm * nn)
+squareAndSquareRoot2 m n = do
+    mm <- square m
+    nn <- square n
+    squareRoot (mm * nn)
