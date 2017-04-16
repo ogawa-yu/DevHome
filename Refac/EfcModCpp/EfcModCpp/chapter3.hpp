@@ -9,6 +9,20 @@
 #ifndef chapter3_hpp
 #define chapter3_hpp
 
-#include <stdio.h>
+#include "ChapterHook.hpp"
+
+namespace my {
+    
+    class Chapter3 : public my::IChapterHook {
+    public:
+        Chapter3();
+        
+        ~Chapter3();
+        
+        void execute(int argc, const char* argv[]);
+        
+        std::string getTitle() const;
+    };
+}
 
 #endif /* chapter3_hpp */
