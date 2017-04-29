@@ -6,16 +6,22 @@
 //  Copyright © 2017年 Y.Ogawa. All rights reserved.
 //
 
-#include "Gus.hpp"
+#include "Gas.hpp"
 
-using my::Gus;
+using my::Gas;
 
-Gus::Gus(const my::Mol& mol)
-:mol_(mol)
+Gas::Gas(const my::GasType& type, const my::Mol& mol)
+: type_(type)
+, mol_(mol)
 {
 }
 
-const my::Mol& Gus::mol() const
+const my::Mol& Gas::mol() const noexcept
 {
     return mol_;
+}
+
+const my::GasType& Gas::type() const noexcept
+{
+    return type_;
 }

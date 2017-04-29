@@ -9,6 +9,24 @@
 #ifndef Density_hpp
 #define Density_hpp
 
-#include <stdio.h>
+#include "PysicalType.h"
+
+namespace my
+{
+    class Density
+    {
+    public:
+        Density(my::O2Density density);
+        ~Density() =default;
+        inline Density(const Density& rhs) =default;
+        Density& operator=(const Density& rhs) =default;
+        Density& operator+(const Density& rhs);
+    private:
+        /**
+         * 空間内のO2濃度
+         */
+        O2Density density_;
+    };
+}
 
 #endif /* Density_hpp */

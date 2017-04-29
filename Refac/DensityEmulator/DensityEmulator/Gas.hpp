@@ -13,13 +13,19 @@
 
 namespace my
 {
-    class Gus
+    class Gas
     {
     public:
-        Gus(const my::Mol& mol);
-        
-        const my::Mol& mol() const;
+        Gas(const GasType& type, const my::Mol& mol);
+        ~Gas() =default;
+        Gas(const Gas& rhs) =default;
+        Gas& operator=(const Gas& rhs) =default;
+        Gas& operator+=(const Gas& rhs) { mol_ += rhs.mol_; return *this; }
+        Gas& operator-=(const Gas& rhs) { mol_ -= rhs.mol_; return *this; }
+        const GasType& type() const noexcept;
+        const my::Mol& mol() const noexcept;
     private:
+        my::GasType type_;
         my::Mol mol_;
     };
 }

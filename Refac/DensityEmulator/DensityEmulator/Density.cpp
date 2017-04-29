@@ -7,3 +7,16 @@
 //
 
 #include "Density.hpp"
+
+using my::Density;
+
+Density::Density(O2Density density)
+:density_(density)
+{
+}
+
+Density& Density::operator+(const Density& rhs)
+{
+    density_ += rhs.density_;
+    return *this;
+}

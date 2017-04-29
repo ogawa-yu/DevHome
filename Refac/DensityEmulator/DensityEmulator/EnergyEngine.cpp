@@ -7,3 +7,11 @@
 //
 
 #include "EnergyEngine.hpp"
+
+using my::EnergyEngine;
+
+my::Work EnergyEngine::calculateAbsoluteWork(const my::Environment &previous, const my::Environment& current)
+{
+    return 0;
+}
+

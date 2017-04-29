@@ -7,3 +7,26 @@
 //
 
 #include "EnvironmentDifference.hpp"
+
+using my::EnvironmentDiffenrence;
+
+EnvironmentDiffenrence::EnvironmentDiffenrence(const my::Environment& previous,
+                                            const my::Environment& current)
+: previous_(previous)
+, current_(current)
+{
+}
+
+my::Temperature EnvironmentDifference::getTemperatureDiff() const noexcept
+{
+    return current_.temperature() - previous_.temperature();
+}
+
+my::Volume getVolumeDiff() const noexcept
+{
+}
+
+my::Pressure getPressureDiff() const noexcept
+{
+    
+}
