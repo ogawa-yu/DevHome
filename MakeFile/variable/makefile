@@ -10,13 +10,13 @@ CPPFLAGS = -I include
 count_words: count_words.o counter.o lexer.o
 	gcc $(CPPFLAGS) $^ -o $@ -ll
 
-count_words.o: count_words.c include/counter.h
+count_words.o: count_words.c counter.h
 	gcc $(CPPFLAGS) -c $<
 
-counter.o: counter.c include/counter.h include/lexer.h
+counter.o: counter.c counter.h lexer.h
 	gcc $(CPPFLAGS) -c $<
 
-lexer.o: lexer.c include/lexer.h
+lexer.o: lexer.c lexer.h
 	gcc $(CPPFLAGS) -c $<
 
 lexer.c: lexer.l
