@@ -1,7 +1,10 @@
-
+#
 # 変数について
 #
-VPATH = src
+#VPATH = src
+vpath %.c src
+vpath %.l src
+vpath %.h include
 CPPFLAGS = -I include
 
 count_words: count_words.o counter.o lexer.o
