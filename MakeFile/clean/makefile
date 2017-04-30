@@ -9,8 +9,8 @@
 prog.o : test.c
 	gcc -c test.c
 
-.PHONY: all clean1
-all:
+.PHONY: all clean
+all: 
 	@sh ./all.sh
 clean:
 	@rm -f *.o
