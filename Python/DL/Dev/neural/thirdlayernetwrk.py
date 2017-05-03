@@ -1,7 +1,7 @@
 import numpy as np
 from sigmoid import sigmoid
 from identity import identity_function
-
+from softmax import softmax
 def init_network():
     network = {}
     network['W1'] = np.array([[0.1, 0.3, 0.5], [0.2, 0.4, 0.6]]) 
@@ -26,7 +26,7 @@ def forward(network, X):
     z2 = sigmoid(a2)
 
     a3 = transport_signal(z2, W3, b3)
-    return identity_function(a3)
+    return softmax(a3)
 
 network = init_network()
 x = np.array([1.0, 0.5])
