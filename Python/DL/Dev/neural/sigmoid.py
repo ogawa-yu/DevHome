@@ -8,5 +8,5 @@ def myplot(x):
     plt.plot(x)
     plt.show()
 
-y = sigmoid(np.arange(1, 10, 0.1))
+y = sigmoid(np.arange(-10.0, 10.0, 0.1))
 myplot(y)
