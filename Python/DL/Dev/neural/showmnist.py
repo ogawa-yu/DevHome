@@ -11,13 +11,12 @@ def img_show(img):
 (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)
 img = x_train[0]
 label = t_train[0]
-print(label)
-print(img.shape)
 # 画像を元のサイズに変換
 # load_mnistでflatten=Trueにすると
 # numpyの一次元配列に画像データが格納される
 # 画像表示のために二次元配列に変換する必要がある
-img = img.reshape(28, 28)
+dataSize = np.int(np.sqrt(img.shape))
+img = img.reshape(dataSize, dataSize)
 print(img.shape)
 
 img_show(img)
