@@ -5,6 +5,7 @@ from dataset.mnist import load_mnist
 import pickle
 from sigmoid import sigmoid
 from softmax import softmax
+from error_function import mean_squared_error
 
 def get_test_data():
     (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=True, one_hot_label=False)
@@ -37,5 +38,3 @@ for i in range(len(x)):
         accuracy_count += 1
 # 正確度の算出
 print("Accuracy:" + str(float(accuracy_count / len(x))))
-
-
