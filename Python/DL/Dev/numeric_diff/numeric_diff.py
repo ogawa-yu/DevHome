@@ -24,17 +24,6 @@ def differential_line(x, dy, y, a):
         return dy[a] * (x - x[a]) + y[a]
 
 if (__name__ == '__main__'):
-"""
-    x = np.arange(0.0, 20.0, 0.1)
-    y = sample_function(x)
-    dy = differential_1d(sample_function, x)
-    yt = differential_line(x, dy, y, 15 * 10) 
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.plot(x, y)
-    plt.plot(x, yt)
-    plt.show()
-"""
     x0 = np.arange(-2.0, 2.0, 0.1)
     x1 = np.arange(-2.0, 2.0, 0.1)
     X, Y = np.meshgrid(x0, x1)
@@ -50,3 +39,16 @@ if (__name__ == '__main__'):
     plt.legend()
     ax.plot_wireframe(X,Y,Z)
     plt.show()
+
+    """
+    x = np.arange(0.0, 20.0, 0.1)
+    y = sample_function(x)
+    dy = differential_1d(sample_function, x)
+    yt = differential_line(x, dy, y, 15 * 10) 
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.plot(x, y)
+    plt.plot(x, yt)
+    plt.show()
+"""
+
