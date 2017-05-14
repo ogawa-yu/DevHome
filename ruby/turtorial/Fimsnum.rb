@@ -10,7 +10,6 @@ end
 
 3.my_times {puts 'mangy moose'}
 
-
 def call_block(&block)
   block.call
 end
