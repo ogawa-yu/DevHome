@@ -1,6 +1,11 @@
 class ClientWorkoutsController < ApplicationController
   before_action :set_client_workout, only: [:show, :edit, :update, :destroy]
 
+  #Hello World!
+  def Hello
+    render html: "hello world!"
+  end
+
   # GET /client_workouts
   # GET /client_workouts.json
   def index
