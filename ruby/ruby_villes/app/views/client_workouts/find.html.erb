@@ -1,4 +1,21 @@
-<% form_tag "client_workouts/find" do %>
-<%= text_field_tag :search_string %>
-<%= submit_tag "Search" %>
-<% end %>
+<h1>Listening client_workouts for <%=h params[:search_string]%></h1>
+
+<table>
+    <tr>
+        <th>Trainer</th>
+        <th>Duration mins</th>
+        <th>Date of workout</th>
+        <th>Paid amount</th>
+    </tr>
+    <% @client_workouts.each do |cw| %>
+        <tr>
+            <td><%=h cw.tainer %></td>
+            <td><%=h cw.duration_mins %></td>
+            <td><%=h cw.date_of_workout %></td>
+            <td><%=h cw.paid_amount %></td>
+            <td><%= link_to 'Show', cw %></td>
+            <td><%= link_to 'Edit', edit_client_workout_path(cw) %></td>
+            <td><%= link_to 'Destroy', cw, method: :delete, data: { confirm: 'Are you sure?' }%>
+        </tr>
+    <% end %>
+</table>

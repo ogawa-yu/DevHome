@@ -2,8 +2,7 @@ class ClientWorkoutsController < ApplicationController
   before_action :set_client_workout, only: [:show, :edit, :update, :destroy]
 
   def find
-    # nothing to do
-    puts "Show #{params[:search_string]}"
+    @client_workouts = ClientWorkout.where(client_name: params[:search_string])
   end
 
   # GET /client_workouts
