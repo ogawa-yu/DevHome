@@ -2,7 +2,8 @@ class ClientWorkoutsController < ApplicationController
   before_action :set_client_workout, only: [:show, :edit, :update, :destroy]
 
   def find
-    @client_workouts = ClientWorkout.where(client_name: params[:search_string])
+    @client_workouts = ClientWorkout.where(
+        "client_name IN (?) or tainer IN (?)", params[:search_string], params[:search_string])
   end
 
   # GET /client_workouts
