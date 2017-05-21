@@ -1,9 +1,9 @@
 class ClientWorkoutsController < ApplicationController
   before_action :set_client_workout, only: [:show, :edit, :update, :destroy]
 
-  #Hello World!
-  def Hello
-    render html: "hello world!"
+  def find
+    # nothing to do
+    puts "Show #{params[:search_string]}"
   end
 
   # GET /client_workouts
