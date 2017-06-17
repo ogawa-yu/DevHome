@@ -9,13 +9,11 @@ class DiscountImperative {
                     new BigDecimal("20"), new BigDecimal("15"), new BigDecimal("18"),
                     new BigDecimal("45"), new BigDecimal("12")
             );
-        BigDecimal total = BigDecimal.ZERO;
-        for (BigDecimal price : PRICES) {
-            if (price.compareTo(BigDecimal.valueOf(20)) > 0) {
-                total = total.add(price.multiply(BigDecimal.valueOf(0.9)));
-            }
-        }
-
+        final BigDecimal total = 
+            PRICES.stream()
+                  .filter(price -> price.compareTo(BigDecimal.valueOf(20)) > 0)
+                  .map(price -> price.multiply(BigDecimal.valueOf(0.9)))
+                  .reduce(BigDecimal.ZERO, BigDecimal::add);
         System.out.println("Total prices is " + total.toString());
     }
 }
