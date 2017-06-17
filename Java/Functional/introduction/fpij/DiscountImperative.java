@@ -10,7 +10,7 @@ class DiscountImperative {
                     new BigDecimal("45"), new BigDecimal("12")
             );
         final BigDecimal total = 
-            PRICES.stream()
+            PRICES.parallelStream()
                   .filter(price -> price.compareTo(BigDecimal.valueOf(20)) > 0)
                   .map(price -> price.multiply(BigDecimal.valueOf(0.9)))
                   .reduce(BigDecimal.ZERO, BigDecimal::add);
