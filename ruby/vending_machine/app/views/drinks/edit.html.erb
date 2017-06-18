@@ -1,0 +1,6 @@
+<h1>Stock Drink</h1>
+
+<p><b>Add Stock</b><br /> <%= text_field :params, :add_stock %></p>
+<p><%= link_to '補充', @drink.update, :controller => "drinks", :action => "update" %></p>
+
+<%= link_to 'Back', vending_machine_index_path %>

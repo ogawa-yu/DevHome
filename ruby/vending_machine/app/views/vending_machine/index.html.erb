@@ -1,1 +1,23 @@
 <h1>Vending Machine</h1>
+
+<%= button_to "New Coin", :action => "create", :controller => "currencies", :class => 'btn btn-primary' %>
+<table>
+    <% @drinks.each do |drink| %>
+    <tr>
+        <td><%= drink.drink_name %></td>
+        <td><%= drink.discount %></td>
+        <td><%= button_to "購入", :controller => "vending_machine", :action => "buy",
+                            :class => 'btn toury',
+                            params: { drink: {drink_name: drink.drink_name, 
+                                              drink_type: drink.drink_type,
+                                              stock: drink.stock,
+                                              discount: drink.discount} } %></td>
+        <td><%= button_to "ドリンク補充", edit_drink_path(drink), :method => :get,
+                            :class => 'btn btn-primary',
+                            params: { drink: {drink_name: drink.drink_name, 
+                                              drink_type: drink.drink_type,
+                                              stock: drink.stock,
+                                              discount: drink.discount} } %></td>
+    </tr>
+    <% end %>
+</table>

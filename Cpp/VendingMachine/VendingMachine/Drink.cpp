@@ -35,7 +35,12 @@ Drink::Drink(int kind)
 
 
 
-int Drink::getKind()
+int Drink::getKind() const
 {
     return kind_;
+}
+
+bool Drink::empty() const
+{
+    return kind_ == vending::UNKNOWN;
 }

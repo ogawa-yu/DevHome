@@ -61,16 +61,10 @@ namespace vending
          */
         Drink operator=(const Drink& other);
 
-        /**
+        int getKind() const;
+        
+        bool empty() const;
 
-         *  
-         */
-        int getKind();
-
-        //static const int UNKNOWN_ = 0;
-        //static const int COKE_ = 1;
-        //static const int DIET_COKE_ = 2;
-        //static const int TEA_ = 3;
 
     private:
         /**
