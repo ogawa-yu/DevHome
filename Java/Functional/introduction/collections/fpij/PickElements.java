@@ -4,12 +4,9 @@ class PickElements {
     static final List<String> friends = Arrays.asList("Brian", "Nate", "Neal", "Raju", "Sara", "Scott");
 
     public static void main(String[] args) {
-        final List<String> startWithN = new ArrayList<>();
-        for (String name : friends) {
-            if (name.startsWith("N")) {
-                startWithN.add(name);
-            }
-        }
+        final List<String> startWithN = friends.stream()
+                            .filter(name -> name.startsWith("N"))
+                            .collect(java.util.stream.Collectors.toList());
         System.out.println(startWithN);
     }
 }
