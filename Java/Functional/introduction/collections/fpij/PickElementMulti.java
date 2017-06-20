@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Function;
 
 class PickElementMulti {
 
@@ -9,8 +10,14 @@ class PickElementMulti {
         final List<String> friends = Arrays.asList("Brian", "Nate", "Neal", "Raju", "Sara", "Scott");
         final List<String> editors = Arrays.asList("Brian", "Jackie", "Jone", "Mike");
         final List<String> comrades = Arrays.asList("Kate", "Ken", "Nick", "Paula", "Zach");
-        final Predicate<String> startWithN = startsWith("N");
-        final Predicate<String> startWithB = startsWith("B");
+        final Function<String, Predicate<String>> startsWithLetter =
+            (String letter) -> {
+                Predicate<String> checkStarts = (String name) -> name.startsWith(letter);
+                return checkStarts;
+            };
+        final Predicate<String> startWithN = startsWithLetter.apply("N");
+        final Predicate<String> startWithB = startsWithLetter.apply("B");
+
         System.out.println(count(startWithN).of(friends));
         System.out.println(count(startWithB).of(friends));
         System.out.println(count(startWithN).of(editors));
@@ -26,12 +33,7 @@ class PickElementMulti {
         return finder;
     }
 
-    static public Predicate<String> startsWith(final String letter) {
-        return name -> name.startsWith(letter);
-    }
-    
     long of(final List<String> names) {
         return names.stream().filter(pred_).count();
     }
-
 }
