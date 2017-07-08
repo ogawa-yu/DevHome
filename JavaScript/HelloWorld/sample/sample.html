@@ -1,0 +1,37 @@
+<!DCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <title>テスト</title>
+        <script>
+            _TestProperty = {}
+            _TestProperty.addedCount_ = 0;
+
+            $(function() {
+                $('p').on('click', function() {$(this).fadeOut('show');});
+                $('#adder').on('click', function() {
+                    $('ul').append('<div id="added' + _TestProperty.addedCount_ + '"><p> added' + _TestProperty.addedCount_ + '</p></div>'); 
+                    _TestProperty.addedCount_++;
+                });
+                $('#remover').on('click', function() {
+                    if (_TestProperty.addedCount_ > 0) {
+                        _TestProperty.addedCount_--;
+                        $('#added' + _TestProperty.addedCount_).remove();
+                    }    
+                })
+            });
+        </script>
+    </head>
+    <body>
+        <p> test </p>
+        <p> test2 </p>
+        <b> test3 </b>
+        <ul>
+            <p> A </p>
+            <p> B </p>
+        </ul>
+        <button id="adder">add ui element</button>
+        <button id="remover">remove ui element</button>
+    </body>
+</html>
