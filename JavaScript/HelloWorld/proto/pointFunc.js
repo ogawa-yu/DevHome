@@ -31,3 +31,10 @@ print(p3.x);
 print(p3.y);
 print(p3.z);
 print(p3.getNorm());
+
+//未定義のコンストラクタ関数を呼び出すと、
+//プロパティはundefinedになる。
+var p3n = new Point3D();
+print(p3n.x);
+print(p3n.y);
+print(p3n.z);
