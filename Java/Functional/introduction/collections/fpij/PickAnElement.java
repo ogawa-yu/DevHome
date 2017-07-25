@@ -4,8 +4,9 @@ public class PickAnElement {
     static final List<String> friends = Arrays.asList("Brian", "Nate", "Neal", "Raju", "Sara", "Scott");
 
     public static void main(String[] args) {
-        System.out.println(findData(1, Arrays.asList(2, 3, 4, 1, 5)).orElse(new Integer(-1)));
-        
+        Optional<Integer> result = findData(1, Arrays.asList(2, 3, 4, 5));
+        // ここでoptionalに値は入ってきていないので、下のコードブロックは実行されない。
+        result.ifPresent(data -> System.out.println(data));
     }
 
     public static void pickElemet(List<String> names, String startingLetter) {
