@@ -8,8 +8,18 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(function() {
+            $('a').addClass('test');
+
             $('a').on('click', function(event) {
                 alert("Thank you for visiting.");
+                event.preventDefault();
+                $(this).hide("slow"); // リンクが画面上から消える。
+            });
+
+            $('a').removeClass('test');
+
+            $.get("myLinkedPage.html", function() {
+                myCallback();
             });
         });
 

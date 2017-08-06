@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ボタンが増えるよ。</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            var _own = {};
+            $(function() {
+                _own.buttons = [1, 2, 3].map(function(element) {
+                    return '<p id="added_button_' + element + '" >追加されたよ(' + element + ')</p>';
+                });
+                _own.currentIndex_ = 0;
+
+                $('#add').on('click', function() {
+                    if (_own.currentIndex_ === _own.buttons.length) {
+                        return;
+                    }
+                    $('#addee').append(_own.buttons[_own.currentIndex_]);
+                    _own.currentIndex_++;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <ul id="addee"> test </ul>
+        <button id="add">ボタンを追加</button>
+    </body>
+
+</html>
