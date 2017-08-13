@@ -11,6 +11,10 @@ class Factorial {
     }
 
     public static void main(String[] args) {
-        System.out.println(Factorial.factorialRec(new Long(args[0])));
+        try {
+            System.out.println(Factorial.factorialRec(new Long(args[0])));
+        } catch (StackOverflowError e) {
+            System.out.println(e);
+        }
     }
 }
