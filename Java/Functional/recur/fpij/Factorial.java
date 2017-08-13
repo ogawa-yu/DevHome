@@ -5,7 +5,7 @@ class Factorial {
         return factorialRec(1, number).invoke();
     }
 
-    public static TailCall<Long> factorialRec(final long factorial, final long number) {
+    private static TailCall<Long> factorialRec(final long factorial, final long number) {
         if (number == 1) {
             return TailCalls.done(factorial);
         }
