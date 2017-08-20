@@ -1,13 +1,9 @@
 class CheckAccumlator {
     private var sum_ = 0
 
-    def add(b: Byte): Unit = {
-        sum_ += b
-    }
+    def add(b: Byte) = sum_ += b
 
-    def checksum(): Int = {
-        return ~(sum_ & 0xFF) + 1
-    }
+    def checksum() = ~(sum_ & 0xFF) + 1
 }
 
 val acc = new CheckAccumlator
