@@ -4,9 +4,16 @@ class Rational(n: Int, d: Int) {
     val number: Int = n / g
     val denom: Int = d / g
     def this(n: Int) = this(n, 1)
-    def add(that: Rational): Rational = {
+    def +(that: Rational): Rational = {
         return new Rational(
             number * that.denom + that.number * denom,
+            denom * that.denom
+        )
+    }
+
+    def *(that: Rational): Rational = {
+        return new Rational(
+            number * that.number,
             denom * that.denom
         )
     }
