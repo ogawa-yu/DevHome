@@ -3,7 +3,7 @@ class Rational(n: Int, d: Int) {
     override def toString = n + "/" + d
     val number: Int = n
     val denom: Int = d
-
+    def this(n: Int) = this(n, 1)
     def add(that: Rational): Rational = {
         return new Rational(
             number * that.denom + that.number * denom,
