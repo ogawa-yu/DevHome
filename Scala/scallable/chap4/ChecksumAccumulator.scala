@@ -24,5 +24,3 @@ class ChecksumAccumulator {
 
     def checksum() = ~(sum_ & 0xFF) + 1
 }
-
-println(ChecksumAccumulator.calculate(args(0)))
