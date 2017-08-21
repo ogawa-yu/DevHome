@@ -10,6 +10,8 @@ class Rational(n: Int, d: Int) {
             denom * that.denom
         )
     }
+    def +(that: Int): Rational =
+        new Rational(number + that * denom, denom)
 
     def *(that: Rational): Rational = {
         return new Rational(
@@ -17,6 +19,8 @@ class Rational(n: Int, d: Int) {
             denom * that.denom
         )
     }
+    def *(that: Int) : Rational =
+        new Rational(number * that, denom)
 
     def lessThan(that: Rational) = this.number * that.denom < this.denom * that.number
 
