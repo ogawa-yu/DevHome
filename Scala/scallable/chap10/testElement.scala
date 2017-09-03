@@ -21,14 +21,14 @@ object ElementTest extends App {
         val elem1 = Element.elem("I am")
         val elem2 = Element.elem("cat.")
         val elem3 = Element.elem("there is no name yet")
-        assert(Array("I am", "cat.", "there is no name yet") == elem1.above(elem2).above(elem3).contents)
+        assert(Array("I am", "cat.", "there is no name yet") == ((elem1 above elem2) above elem3).contents)
     }
     def test_beside = {
         val elem1 = Element.elem("I am")
         val elem2 = Element.elem(" cat.")
         val elem3 = Element.elem(" there is no name yet")
 
-        assert("I am cat. there is no name yet" == elem1.beside(elem2).beside(elem3).toString)
+        assert("I am cat. there is no name yet" == ((elem1 beside elem2) beside elem3).toString)
     }
 
     arrayElementTest

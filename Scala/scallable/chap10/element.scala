@@ -11,6 +11,20 @@ abstract class Element {
                 (line1, line2) <- this.contents zip that.contents
             ) yield line1 + line2
         )
+    def widen(w: Int): Element =
+        if (w <= length) this
+        else {
+            val left = elem(' ', (w - width) / 2, height)
+            val right = elem(' ', w - width - left.width, height)
+            left beside this beside right
+        }
+    def heighten(h: Int): Element =
+        if (h <= height) this
+        else {
+            val top = elem(' ', width, (h - height) / 2)
+            val bot = elem(' ', width, h - height - top.height)
+            top above this above bot
+        }
     override def toString = contents mkString "\n"
 }
 
