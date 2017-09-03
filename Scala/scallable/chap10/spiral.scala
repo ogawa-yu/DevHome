@@ -3,7 +3,8 @@ import Element.elem
 object Spiral {
   val space = elem(" ")
   val corner = elem("+")
-  def spiral(nEdges: Int, direction: Int): Element = {
+  def spiral(nEdges: Int): Element = spiral(nEdges, 0)
+  private def spiral(nEdges: Int, direction: Int): Element = {
     if (nEdges == 1)
       elem("+")
     else {
@@ -22,6 +23,6 @@ object Spiral {
   }
   def main(args: Array[String]) = {
     val nEdges = args(0).toInt
-    println(spiral(nEdges, 0))
+    println(spiral(nEdges))
   }
 }
