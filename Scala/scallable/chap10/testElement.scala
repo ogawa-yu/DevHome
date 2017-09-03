@@ -17,8 +17,22 @@ object ElementTest extends App {
         assert(unifElem.width == 2)
         assert(unifElem.height == 3)
     }
+    def test_above = {
+        val elem1 = new LineElement("I am")
+        val elem2 = new LineElement("cat.")
+        val elem3 = new LineElement("there is no name yet")
+        assert(Array("I am", "cat.", "there is no name yet") == elem1.above(elem2).above(elem3).contents)
+    }
+    def test_beside = {
+        val elem1 = new LineElement("I am")
+        val elem2 = new LineElement(" cat.")
+        val elem3 = new LineElement(" there is no name yet")
+
+        assert("I am cat. there is no name yet" == elem1.beside(elem2).beside(elem3).toString)
+    }
 
     arrayElementTest
     lineElementTest
     uniformElementTest
+    test_beside
 }
