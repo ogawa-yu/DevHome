@@ -12,7 +12,7 @@ abstract class Element {
             ) yield line1 + line2
         )
     def widen(w: Int): Element =
-        if (w <= length) this
+        if (w <= width) this
         else {
             val left = elem(' ', (w - width) / 2, height)
             val right = elem(' ', w - width - left.width, height)
