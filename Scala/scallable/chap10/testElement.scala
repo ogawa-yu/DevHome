@@ -11,7 +11,14 @@ object ElementTest extends App {
         assert(lineElem.width == 11)
         assert(lineElem.height == 1)
     }
+    def uniformElementTest = {
+        val unifElem = new UniformElement('A', 2, 3)
+        unifElem.contents.foreach(println)
+        assert(unifElem.width == 2)
+        assert(unifElem.height == 3)
+    }
 
     arrayElementTest
     lineElementTest
+    uniformElementTest
 }
