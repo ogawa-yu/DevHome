@@ -4,6 +4,7 @@ abstract class Expr {
             case UnOp("-", UnOp("-", e)) => e
             case BinOp("+", e, Number(0)) => e
             case BinOp("*", e, Number(1)) => e
+            case _ => expr
         }
 }
 case class Var(name: String) extends Expr
