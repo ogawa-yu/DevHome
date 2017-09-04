@@ -2,6 +2,7 @@ abstract class Expr {
     def simplifyTop(expr: Expr) =
         expr match {
             case UnOp("-", UnOp("-", e)) => e
+            case UnOp("abs", e @ UnOp("abs", _)) => e
             case BinOp("+", e, Number(0)) => e
             case BinOp("*", e, Number(1)) => e
             case _ => expr

@@ -17,6 +17,14 @@ class ExprSpec extends FlatSpec with Matchers {
       val num = Number(3.0)
       num.simplifyTop(UnOp("-", UnOp("-", num))) == num should be (true)
     }
+    it should "as same as tha passed value when abs op after abs" in {
+      val num = Number(-3.0)
+      num.simplifyTop(UnOp("abs", UnOp("abs", num))) == UnOp("abs", num) should be (true)
+    }
+    it should "as not same as tha passed value when abs op" in {
+      val num = Number(-3.0)
+      num.simplifyTop(UnOp("abs", num)) == UnOp("abs", num) should be (true)
+    }
     it should "as same as the passed value when zero plused" in {
       val num = Number(3.0)
       num.simplifyTop(BinOp("+", num, Number(0))) == num should be (true)
