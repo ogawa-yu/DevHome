@@ -1,9 +1,11 @@
-class Rational(n: Int, d: Int) {
+class Rational(n: Int, d: Int) extends Ordered[Rational] {
     require(d != 0)
     private val g = gcd(n.abs, d.abs)
     val number: Int = n / g
     val denom: Int = d / g
     def this(n: Int) = this(n, 1)
+    def compare(that: Rational) =
+        (this.number * that.denom) - (this.denom * that.number)
     def +(that: Rational): Rational = {
         return new Rational(
             number * that.denom + that.number * denom,
