@@ -25,4 +25,8 @@ class ExprSpec extends FlatSpec with Matchers {
       val num = Number(3.0)
       num.simplifyTop(BinOp("*", num, Number(1))) == num should be (true)
     }
+    it should "as not same as the passed value" in {
+      val num = Number(3.0)
+      num.simplifyTop(BinOp("*", num, Number(2))) != num should be (true)
+    }
 } 
