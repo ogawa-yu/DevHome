@@ -1,11 +1,21 @@
 abstract class Expr {
-    def simplifyTop(expr: Expr) =
+    def simplifyAll(): Expr = simplifyAll(this)
+    def simplifyAll(expr: Expr): Expr =
         expr match {
-            case UnOp("-", UnOp("-", e)) => e
-            case UnOp("abs", e @ UnOp("abs", _)) => e
-            case BinOp("+", e, Number(0)) => e
-            case BinOp("*", e, Number(1)) => e
-            case BinOp("+", x, y) if x == y => BinOp("*", Number(2), x)
+            case UnOp("-", UnOp("-", e)) =>
+                simplifyAll(e)
+            case UnOp("abs", e @ UnOp("abs", _)) =>
+                simplifyAll(e)
+            case BinOp("+", e, Number(0)) =>
+                simplifyAll(e)
+            case BinOp("*", e, Number(1)) =>
+                simplifyAll(e)
+            case BinOp("+", x, y) if x == y =>
+                simplifyAll(BinOp("*", Number(2), x))
+            case UnOp(op, e) =>
+                UnOp(op, simplifyAll(e))
+            case BinOp(op, l, r) =>
+                BinOp(op, simplifyAll(l), simplifyAll(r))
             case _ => expr
         }
 }
