@@ -37,4 +37,8 @@ class ExprSpec extends FlatSpec with Matchers {
       val num = Number(3.0)
       num.simplifyTop(BinOp("*", num, Number(2))) != num should be (true)
     }
+    it should "same number summention as same as twice" in {
+      val num = Number(2.0)
+      num.simplifyTop(BinOp("+", num, num)) == BinOp("*", Number(2), num) should be (true)
+    }
 } 

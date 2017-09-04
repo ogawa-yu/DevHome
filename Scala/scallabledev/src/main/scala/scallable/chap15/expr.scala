@@ -5,6 +5,7 @@ abstract class Expr {
             case UnOp("abs", e @ UnOp("abs", _)) => e
             case BinOp("+", e, Number(0)) => e
             case BinOp("*", e, Number(1)) => e
+            case BinOp("+", x, y) if x == y => BinOp("*", Number(2), x)
             case _ => expr
         }
 }
