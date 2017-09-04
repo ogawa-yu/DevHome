@@ -43,7 +43,7 @@ class ExprSpec extends FlatSpec with Matchers {
     }
     it should "as same as the passed expression" in {
       val expr = BinOp("+",
-                    BinOp("+", Number(3.0), Number(2.0)),
+                    BinOp("+", Number(3.0), BinOp("*", Number(2.0), Number(1))),
                     UnOp("-", UnOp("-", BinOp("+", Number(4.0), Number(4.0)))))
       val expected = BinOp("+",
                       BinOp("+", Number(3.0), Number(2.0)),
