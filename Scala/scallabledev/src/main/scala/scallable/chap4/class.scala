@@ -6,9 +6,11 @@ class CheckAccumlator {
     def checksum() = ~(sum_ & 0xFF) + 1
 }
 
-val acc = new CheckAccumlator
-println(acc.checksum) // 0
-acc.add(1)
-println(acc.checksum) // -1
-acc.add(1)
-println(acc.checksum) // -2
+object CheckAccumlatorApp extends App {
+    val acc = new CheckAccumlator
+    println(acc.checksum) // 0
+    acc.add(1)
+    println(acc.checksum) // -1
+    acc.add(1)
+    println(acc.checksum) // -2
+}

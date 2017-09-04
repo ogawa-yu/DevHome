@@ -1,1 +1,4 @@
-args.foreach(arg => println(arg))
+
+object LoopForEach extends App {
+    args.foreach(arg => println(arg))
+}

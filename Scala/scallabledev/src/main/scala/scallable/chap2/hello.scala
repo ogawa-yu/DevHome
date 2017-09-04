@@ -1,1 +1,3 @@
-println("Hello, " + args(0) + "!")
+object Hello extends App {
+    println("Hello, " + args(0) + "!")
+}

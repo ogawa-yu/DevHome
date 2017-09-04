@@ -1,3 +1,5 @@
-def formatArgs(args: Array[String]) = args.mkString(" ")
+object FunctionalPrint extends App {
+    def formatArgs(args: Array[String]) = args.mkString(" ")
 
-println(formatArgs(args))
+    println(formatArgs(args))
+}

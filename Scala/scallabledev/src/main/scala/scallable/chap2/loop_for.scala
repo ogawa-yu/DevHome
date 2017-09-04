@@ -1,2 +1,5 @@
-for (arg <- args)
-    println(arg)
+
+object LoopFor extends App {
+    for (arg <- args)
+        println(arg)
+}
