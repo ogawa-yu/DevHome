@@ -1,5 +1,7 @@
 import Element.elem
 abstract class Element {
+    require(width > 0)
+    require(height > 0)
     def contents: Array[String]
     def height: Int = contents.length
     def width: Int = if (height == 0) 0 else contents(0).length
