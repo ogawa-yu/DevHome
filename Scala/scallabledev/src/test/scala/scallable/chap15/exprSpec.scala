@@ -50,4 +50,12 @@ class ExprSpec extends FlatSpec with Matchers {
                       BinOp("*", Number(2.0), Number(4.0)))
       expr.simplifyAll() == expected should be (true)
     }
+    it should "format the passed expression: case 1" in {
+      val expr = 
+        BinOp("+",
+          BinOp("*", BinOp("+", Var("x"), Var("y")), Var("z")), 
+          Number(1.0))
+      val formatter = new ExprFormatter
+      formatter.format(expr).toString should be ("(x + y) * z + 1")
+    }
 } 
