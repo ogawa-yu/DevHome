@@ -1,0 +1,15 @@
+<h1>Hello World!!</h1>
+<a href="http://jquery.com">Jump to jQuery</a>
+<script>
+    $(function() {
+        hello_main();
+    });
+
+    function hello_main() {
+        $('a').on('click', function(event) {
+            alert('Thank you for visiting.');
+            event.preventDefault();
+            $(this).hide('slow');
+        });
+    }
+</script>
