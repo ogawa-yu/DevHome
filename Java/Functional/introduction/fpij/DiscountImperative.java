@@ -18,6 +18,13 @@ class DiscountImperative {
                   .filter(price -> price.compareTo(BigDecimal.valueOf(20)) > 0)
                   .map(price -> price.multiply(BigDecimal.valueOf(0.9)))
                   .reduce(BigDecimal.ZERO, BigDecimal::add);
+        final BigDecimal max =
+            PRICES.stream().max(Comparator.naturalOrder()).get();
+        final BigDecimal min =
+            PRICES.stream().min(Comparator.naturalOrder()).get();
+
         System.out.println("Total prices is " + total.toString());
+        System.out.println("Max price:" + max.toString());
+        System.out.println("Min price:" + min.toString());
     }
 }
