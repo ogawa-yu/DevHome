@@ -1,23 +1,48 @@
 // Place all the styles related to the hello controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-strong{color: red;}
-p{
-    color: blue; 
-    text-decoration: underline;
+/**
+ * セレクタ全体
+ */
+strong {
+  color: red;
+}
+p {
+  color: blue; 
+  text-decoration: underline;
 }
 p:hover {
-    color: limegreen;
+  color: limegreen;
 }
-li{color: green;}
-#div_mine{color: magenta;}
-.divClass_mine{color: grey; font-weight: bolder;}
-.carrot{ color: orange;}
-.spinach{ color: green;}
-#second{ font-style: italic;}
+li {
+  color: green;
+}
+/**
+ * id, class固有
+ */
+#div_mine {
+  color: magenta;
+}
+.divClass_mine {
+  color: grey;
+  font-weight: bolder;
+}
+.carrot {
+  color: orange;
+}
+.spinach {
+  color: green;
+}
+#second { 
+  font-style: italic;
+}
+
+/**
+ * ドロップダウンメニュー制御
+ */
 .menu-bar ul ul {
-    display: none;
+  display: none;
 }
 .menu-bar li:hover ul {
-    display: block;
+  display: block;
 }
