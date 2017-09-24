@@ -15,3 +15,9 @@ li{color: green;}
 .carrot{ color: orange;}
 .spinach{ color: green;}
 #second{ font-style: italic;}
+.menu-bar ul ul {
+    display: none;
+}
+.menu-bar li:hover ul {
+    display: block;
+}

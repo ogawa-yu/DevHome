@@ -1,28 +1,49 @@
 <h1>Hello World!!</h1>
 <a href="http://jquery.com">Jump to jQuery</a>
 <p id="first">
-    <strong>C</strong>ascading
-    <strong>S</strong>tyle
-    <strong>S</strong>heet
-    <li>test</li>
-    <div id="div_mine" class="divClass_mine">DivElement</div>
-    <div class="divClass_mine">DivElementWithClass</div>
+  <strong>C</strong>ascading
+  <strong>S</strong>tyle
+  <strong>S</strong>heet
+  <li>test</li>
+  <div id="div_mine" class="divClass_mine">DivElement</div>
+  <div class="divClass_mine">DivElementWithClass</div>
 </p>
 <p id="second">
-    <strong class="carrot">C</strong>ascading
-    <strong class="spinach">S</strong>tyle
-    <strong class="spinach">S</strong>heet
+  <strong class="carrot">C</strong>ascading
+  <strong class="spinach">S</strong>tyle
+  <strong class="spinach">S</strong>heet
 </p>
+<div class="menu-bar">
+  <ul>
+    <li>
+      <a href="example.html">Menu</a>
+      <ul>
+        <li>
+          <a href="example.html">Link</a>
+        </li>
+        <li>
+          <a class="menu-nav" href="example.html">SubMenu</a>
+          <ul>
+            <li><a href="example.html">Link</a></li>
+            <li><a href="example.html">Link</a></li>
+            <li><a href="example.html">Link</a></li>
+            <li><a href="example.html">Link</a></li>
+          </ul>
+        </li>
+        <li><a href="example.html">Link</a></li>
+    </li>
+  </ul>
+</div>
 <script>
-    $(function() {
-        hello_main();
-    });
+  $(function() {
+    hello_main();
+  });
 
-    function hello_main() {
-        $('a').on('click', function(event) {
-            alert('Thank you for visiting.');
-            event.preventDefault();
-            $(this).hide('slow');
-        });
-    }
+  function hello_main() {
+    $('a').on('click', function(event) {
+      alert('Thank you for visiting.');
+      event.preventDefault();
+      $(this).hide('slow');
+    });
+  }
 </script>
