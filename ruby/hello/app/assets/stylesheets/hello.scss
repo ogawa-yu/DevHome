@@ -2,7 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 strong{color: red;}
-p{color: blue; text-decoration: underline;}
+p{
+    color: blue; 
+    text-decoration: underline;
+}
+p:hover {
+    color: limegreen;
+}
 li{color: green;}
 #div_mine{color: magenta;}
 .divClass_mine{color: grey; font-weight: bolder}
