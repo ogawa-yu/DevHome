@@ -6,3 +6,4 @@ bin/
 *.o
 *.pyc
 *.python-version
+activator/
