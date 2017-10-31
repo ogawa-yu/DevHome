@@ -41,3 +41,6 @@ print(media.rjust(20))
 
 #left align
 print(media.ljust(20))
+
+# 文字列の置換(マッチするのは最初の一回だけ)
+print(media.replace('D', 'DR', 1))
