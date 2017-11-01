@@ -10,9 +10,12 @@ class TestList(unittest.TestCase) :
         weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         self.assertEqual(weekdays[0], weekdays[-7])
         #print(weekdays[-8]) #length以上のindexはNG
-
+        self.assertEqual(weekdays[1], weekdays[-6])
+        self.assertEqual(weekdays[2], weekdays[-5])
+        self.assertEqual(weekdays[3], weekdays[-4])
+        self.assertEqual(weekdays[4], weekdays[-3])
+        self.assertEqual(weekdays[5], weekdays[-2])
         self.assertEqual(weekdays[6], weekdays[-1])
-        #print(weekdays[7]) #length以上のindexはNG
 
     def test_list_from_string(self):
         cat = list('cat')
