@@ -71,6 +71,17 @@ class TestList(unittest.TestCase) :
         self.assertEqual(testee[1:3], ['tanaka', 'sasaki'])
         self.assertEqual(testee[0:3], testee)
     
+    def test_list_index(self):
+        testee = ['yamada', 'tanaka', 'sasaki']
+        
+        self.assertEqual(testee.index('sasaki'), 2)
+        self.assertRaises(Exception, lambda: testee.index('not found'))
 
+    def test_list_in(self):
+        testee = ['yamada', 'tanaka', 'sasaki']
+
+        self.assertEqual('sasaki' in testee, True)
+        self.assertEqual('suzuki' in testee, False)
+    
 if __name__  == '__main__':
     unittest.main()
