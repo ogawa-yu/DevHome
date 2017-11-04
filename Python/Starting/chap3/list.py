@@ -83,5 +83,30 @@ class TestList(unittest.TestCase) :
         self.assertEqual('sasaki' in testee, True)
         self.assertEqual('suzuki' in testee, False)
     
+    def test_list_count(self):
+        testee = ['yamada', 'tanaka', 'sasaki']
+    
+        self.assertEqual(testee.count('yamada'), 1)
+        self.assertEqual(testee.count('honda'), 0)
+
+    def test_list_sort(self):
+        testee = ['yamada', 'tanaka', 'sasaki']
+
+        self.assertEqual(sorted(testee), ['sasaki', 'tanaka', 'yamada'])
+
+    def test_list_operator_equal(self):
+        origin = ['yamada', 'tanaka', 'sasaki']
+        moved = origin
+        origin[0] = 'tanaka'
+
+        self.assertEqual(moved, ['tanaka', 'tanaka', 'sasaki'])
+
+    def test_list_copy(self):
+        origin = ['yamada', 'tanaka', 'sasaki']
+        moved = origin.copy()
+        origin[0] = 'tanaka'
+
+        self.assertEqual(moved, ['yamada', 'tanaka', 'sasaki'])
+
 if __name__  == '__main__':
     unittest.main()
