@@ -1,13 +1,17 @@
 class Person:
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, input_name):
+        self.hidden_name = input_name
     
-    def name(self):
-        return self._name
+    def get_name(self):
+        return self.hidden_name
+
+    def set_name(self, input_name):
+        self.hidden_name = input_name
+    name = property(get_name, set_name)
 
 class EmailPerson(Person):
-    def __init__(self, name, email):
-        super().__init__(name)
+    def __init__(self, input_name, email):
+        super().__init__(input_name)
         self._email = email
     
     def email(self):
@@ -15,8 +19,8 @@ class EmailPerson(Person):
 
 if __name__ == '__main__':
     p = Person('test')
-    print(p.name())
+    print(p.name)
 
     e = EmailPerson('test', 'mail')
-    print(e.name())
+    print(e.name)
     print(e.email())
