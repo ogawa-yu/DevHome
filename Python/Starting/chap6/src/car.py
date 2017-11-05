@@ -1,11 +1,11 @@
 class Car:
     def exclaim(self):
-        return "I'm " + self._name()
-    def _name(self):
+        return "I'm " + self.name()
+    def name(self):
         return 'car'
 
 class Yugo(Car):
-    def _name(self):
+    def name(self):
         return 'yugo'
 
 if __name__ == '__main__':
