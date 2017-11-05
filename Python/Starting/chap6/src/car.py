@@ -3,7 +3,8 @@ class Car:
         return "I'm car"
 
 class Yugo(Car):
-    pass
+    def exclaim(self):
+        return "I'm yugo"
 
 
 if __name__ == '__main__':
