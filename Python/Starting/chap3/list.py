@@ -108,5 +108,19 @@ class TestList(unittest.TestCase) :
 
         self.assertEqual(moved, ['yamada', 'tanaka', 'sasaki'])
 
+    def test_list_copy_by_list_method(self):
+        origin = ['yamada', 'tanaka', 'sasaki']
+        moved = list(origin)
+        origin[0] = 'tanaka'
+
+        self.assertEqual(moved, ['yamada', 'tanaka', 'sasaki'])
+
+    def test_list_copy_by_slice(self):
+        origin = ['yamada', 'tanaka', 'sasaki']
+        moved = origin[:]
+        origin[0] = 'tanaka'
+
+        self.assertEqual(moved, ['yamada', 'tanaka', 'sasaki'])
+
 if __name__  == '__main__':
     unittest.main()
