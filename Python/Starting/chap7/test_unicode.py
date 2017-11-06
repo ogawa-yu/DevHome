@@ -18,6 +18,26 @@ class TestUnicode(ut.TestCase):
 
     def test_unicode_snowman(self):
         self.__test_unicode('\u2603', 'SNOWMAN', '\u2603')
+    
+    def test_encode_snowman_to_utf8(self):
+        encoded_snowman = '\u2603'.encode('utf-8')
+        self.assertEqual(len(encoded_snowman), 3)
+        self.assertEqual(encoded_snowman, b'\xe2\x98\x83')
+
+    def test_encode_snowman_to_ascii_with_ignore(self):
+        encoded_snowman = '\u2603'.encode('ascii', 'ignore')
+        self.assertEqual(len(encoded_snowman), 0)
+        self.assertEqual(encoded_snowman, b'')
+
+    def test_encode_snowman_to_ascii_with_replace(self):
+        encoded_snowman = '\u2603'.encode('ascii', 'replace')
+        self.assertEqual(len(encoded_snowman), 1)
+        self.assertEqual(encoded_snowman, b'?')
+
+    def test_decode_snowman_from_utf_8(self):
+        encoded_snowman = '\u2603'.encode('utf-8')
+        decoded_snowman = encoded_snowman.decode('utf-8')
+        self.assertEqual(decoded_snowman, '\u2603')
 
 if __name__ == '__main__':
     ut.main()
