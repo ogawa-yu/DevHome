@@ -1,4 +1,0 @@
-brew uninstall sbt
-brew uninstall
-brew update
-exit
