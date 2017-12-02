@@ -35,7 +35,7 @@ class ExprFormatter {
       Set("==", "!="),
       Set("<", ">", "<=", ">="),
       Set("+", "-"),
-      Set("*", "%")
+      Set("*", "%", "/")
     )
   }
   // key: Operator, value: index(== order)

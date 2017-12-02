@@ -41,6 +41,14 @@ class ExprSpec extends FlatSpec with Matchers {
       val num = Number(2.0)
       num.simplifyAll(BinOp("+", num, num)) == BinOp("*", Number(2), num) should be (true)
     }
+    it should "same result multi term expression(1)" in {
+      val expr = BinOp("+", BinOp("/", Number(1.0), Number(2.0)), Number(1.0))
+      expr.simplifyAll() == Number(1/2 + 1)
+    }
+    it should "same result multi term expression(2)" in {
+      val expr = BinOp("/", Number(1.0), BinOp("+", Number(2.0), Number(1.0)))
+      expr.simplifyAll() == Number(1/(2 + 1))
+    }
     it should "as same as the passed expression" in {
       val expr = BinOp("+",
                     BinOp("+", Number(3.0), BinOp("*", Number(2.0), Number(1))),
