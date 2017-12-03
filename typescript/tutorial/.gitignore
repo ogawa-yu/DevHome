@@ -1,5 +1,2 @@
-/src/ts/*.js
-/src/ts/customer/*.js
-/src/ts/radio/*.js
-/src/ts/radio/*.js.map
-/src/ts/*.js.map
+*.js
+*.js.map
