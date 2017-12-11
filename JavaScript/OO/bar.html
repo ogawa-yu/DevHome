@@ -11,20 +11,14 @@
             <input type="text" value="{{value}}"></input>
             <button>Save</button>
         </script>
+        <script type="text/javascript" src="./parts/InplaceEditor.js"></script>
         <script>
             $(function() {
                 var templates = {
                     viewer: Handlebars.compile($("#viewer_template").html()),
                     editor: Handlebars.compile($("#editor_template").html())
                 };
-                var value = 'クリックして編集';
-                var target = $("#target").html(templates.viewer({value: value}))
-                .on('click', 'p', function(event) {
-                    $(event.delegateTarget).html(templates.editor({value: value}));
-                }).on('click', 'button', function(event) {
-                    value = $(event.delegateTarget).find('input').val();
-                    $(event.delegateTarget).html(templates.viewer({value: value}));
-                });
+                var target = new InplaceEditor($("#target"), templates);
             });
         </script>
     </head>
