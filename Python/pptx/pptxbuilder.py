@@ -14,9 +14,10 @@ class PptxBuilder:
 
         title.text = title_text
         subtitle.text = subtitle_text
+        return self
 
     def make_bullet(self):
-        yield
+        return self
     
     def save(self):
         self.__prs.save(self.__file_name)
