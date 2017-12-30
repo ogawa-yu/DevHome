@@ -1,5 +1,10 @@
+import numpy as np
 
-class Individual(object):
+class Individual(np.ndarray):
+    fitness = None
+    
+    def __new__(cls, a):
+        return np.asarray(a).view(cls)
 
-    def __init__(self, fitness):
-        self.fitness = fitness
+    def __repr__(self):
+        return self.base
