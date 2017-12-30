@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
-from individual import Individual
+from population import Population
 import selection
 
 class GeneticAlgorithm(metaclass=ABCMeta):
@@ -9,21 +9,19 @@ class GeneticAlgorithm(metaclass=ABCMeta):
         pass
 
 class SimpleGA(GeneticAlgorithm):
-    __generations = 100
-    __populations = 100
+    n_genes = 100
+    n_individuals = 100
 
-    def __init__(self, selection):
+    def __init__(self, selection, eval_function):
         self.selection = selection
+        self.eval_function = eval_function
 
     def execute(self):
-        individuals = []
-        for population in range(0, self.__populations):
-            individuals.append(Individual(0))
+        population = Population(
+            self.n_individuals, 
+            self.n_genes, 
+            self.eval_function)
 
-        for generation in range(0, self.__generations):
-            for population in range(0, self.__populations):
-                pass
         return "end"
-
 
 
