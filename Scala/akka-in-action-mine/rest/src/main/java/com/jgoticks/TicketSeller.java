@@ -6,12 +6,9 @@ import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.http.impl.engine.ws.WebSocket;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import akka.japi.*;
-import lombok.ToString;
+import lombok.Data;
+import lombok.Value;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,37 +65,26 @@ public class TicketSeller extends AbstractActor {
                 .build();
     }
 
-    @AllArgsConstructor @Getter @EqualsAndHashCode @ToString
-    public static class Ticket {
+    @AllArgsConstructor
+    public static @Data class Ticket {
         private final int id;
     }
 
-    @AllArgsConstructor @Getter @ToString
-    public static class Tickets {
-        private final String event;
-        private final List<Ticket> tickets;
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof Tickets)) {
-                return false;
-            }
-            Tickets other = (Tickets)obj;
-            return event.equals(other.event) && tickets.equals(other.tickets);
-        }
+    public @Value(staticConstructor ="of") static class Tickets {
+        private String event;
+        private List<Ticket> tickets;
     }
 
-    @AllArgsConstructor @Getter
-    public static class Add {
+    @AllArgsConstructor
+    public static @Data class Add {
         private final List<Ticket> tickets;
     }
-    @AllArgsConstructor @Getter
-    public static class Buy {
+
+    @AllArgsConstructor
+    public static @Data class Buy {
         private final int tickets;
     }
+
     public static class GetEvent {}
     public static class Cancel {}
 }

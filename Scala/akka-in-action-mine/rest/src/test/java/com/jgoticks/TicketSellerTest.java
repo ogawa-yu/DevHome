@@ -43,7 +43,7 @@ public class TicketSellerTest extends TestKit {
         Patterns.ask(testActor, new Add(makeTickets(3)), 3000);
 
         testActor.tell(new Buy(1), getRef());
-        expectMsg(new Tickets("event test_buy", makeTickets(1)));
+        expectMsg(Tickets.of("event test_buy", makeTickets(1)));
     }
 
     @Test
