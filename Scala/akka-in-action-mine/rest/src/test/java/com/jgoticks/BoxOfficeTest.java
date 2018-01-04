@@ -2,6 +2,7 @@ package com.jgoticks;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.japi.Option;
 import akka.testkit.TestActorRef;
 import akka.testkit.javadsl.TestKit;
 import akka.util.Timeout;
@@ -12,7 +13,10 @@ import scala.concurrent.duration.FiniteDuration;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.jgoticks.BoxOffice.*;
 
@@ -39,6 +43,10 @@ public class BoxOfficeTest extends TestKit {
         system_.terminate();
     }
 
+    private List<TicketSeller.Ticket> makeTicket(int count) {
+        return IntStream.rangeClosed(1, count).mapToObj(TicketSeller.Ticket::new).collect(Collectors.toList());
+    }
+
     @Test
     public void test_createEvent() {
         ActorRef testActor = getSystem().actorOf(BoxOffice.props(), "test_createEvent");
@@ -58,13 +66,13 @@ public class BoxOfficeTest extends TestKit {
         ActorRef testActor = getSystem().actorOf(BoxOffice.props(), "test_getEvent");
 
         testActor.tell(new GetEvent("not_found_event"), getRef());
-        expectMsg(Optional.empty());
+        expectMsg(Option.none());
 
         testActor.tell(new CreateEvent("event_TicketA", 10), getRef());
         expectMsg(new EventCreated(new Event("event_TicketA", 10)));
 
         testActor.tell(new GetEvent("event_TicketA"), getRef());
-        expectMsg(new Event("event_TicketA", 10));
+        expectMsg(Option.some(new Event("event_TicketA", 10)));
     }
 
     @Test
@@ -77,6 +85,7 @@ public class BoxOfficeTest extends TestKit {
         testActor.tell(new CreateEvent("TicketA", 10), getRef());
         testActor.tell(new CreateEvent("TicketB", 10), getRef());
         testActor.tell(new CreateEvent("TicketC", 10), getRef());
+
         expectMsg(new EventCreated(new Event("TicketA", 10)));
         expectMsg(new EventCreated(new Event("TicketB", 10)));
         expectMsg(new EventCreated(new Event("TicketC", 10)));
@@ -88,4 +97,37 @@ public class BoxOfficeTest extends TestKit {
                             new Event("TicketB", 10),
                             new Event("TicketC", 10))));
     }
+
+    @Test
+    public void test_getTicket() {
+        ActorRef testActor = getSystem().actorOf(BoxOffice.props(), "test_getTicket");
+
+        testActor.tell(new GetTicket("ticketA", 10), getRef());
+        expectMsg(TicketSeller.Tickets.of("ticketA", Collections.emptyList()));
+
+        testActor.tell(new CreateEvent("ticketA", 10), getRef());
+        expectMsg(new EventCreated(new Event("ticketA", 10)));
+
+        testActor.tell(new GetTicket("ticketB", 10), getRef());
+        expectMsg(TicketSeller.Tickets.of("ticketB", Collections.emptyList()));
+
+        testActor.tell(new GetTicket("ticketA", 9), getRef());
+        expectMsg(TicketSeller.Tickets.of("ticketA", makeTicket(9)));
+
+        testActor.tell(new GetTicket("ticketA", 2), getRef());
+        expectMsg(TicketSeller.Tickets.of("ticketA", Collections.emptyList()));
+    }
+
+    @Test
+    public void test_cancelEvent() {
+        ActorRef testActor = getSystem().actorOf(BoxOffice.props(), "test_cancelEvent");
+
+        testActor.tell(new CancelEvent("notFound"), getRef());
+        testActor.tell(new CreateEvent("ticketA", 10), getRef());
+        testActor.tell(new CancelEvent("ticketA"), getRef());
+
+        expectMsg(Option.none());
+        expectMsg(new EventCreated(new Event("ticketA", 10)));
+        expectMsg(new Option.Some(new Event("ticketA", 10)));
+   }
 }

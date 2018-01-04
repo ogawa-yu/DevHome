@@ -3,9 +3,11 @@ package com.jgoticks;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.dispatch.OnSuccess;
+import akka.dispatch.OnComplete;
+import akka.event.DiagnosticLoggingAdapter;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import akka.japi.Option;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
 import lombok.Data;
@@ -15,6 +17,8 @@ import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -26,7 +30,7 @@ import static com.jgoticks.TicketSeller.Ticket;
 
 class BoxOffice extends AbstractActor {
     public static Props props() {
-        return Props.create(BoxOffice.class, () -> new BoxOffice());
+        return Props.create(BoxOffice.class, BoxOffice::new);
     }
 
     public static String name() {
@@ -34,16 +38,42 @@ class BoxOffice extends AbstractActor {
     }
 
     private static final String ACTOR_NAME = "boxOffice";
-    private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
+    private static final Timeout TIMEOUT_SEC = new Timeout(FiniteDuration.create(5, "second"));
+    private DiagnosticLoggingAdapter log = Logging.getLogger(this);
 
     private ActorRef createTicketSeller(String event) {
         return getContext().actorOf(TicketSeller.props(event), event);
     }
 
-    public BoxOffice() {
+    private BoxOffice() {
     }
 
-    private <T> void fold(String name, Consumer<ActorRef> isEmpty, Consumer<ActorRef> f) {
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+                .match(CreateEvent.class, msg ->
+                    fold(msg.getName(),
+                            empty -> msg.create(createTicketSeller(msg.getName()), getSender(), getSelf()),
+                            child -> getSender().tell(new EventExists(), getSelf())))
+                .match(GetEvent.class, msg ->
+                    fold(msg.getName(),
+                            empty -> getSender().tell(msg.none(), getSelf()),
+                            child -> child.forward(new TicketSeller.GetEvent(), getContext())))
+                .match(GetEvents.class, msg ->
+                    sender().tell(msg.getEvents(getContext(), log), getSelf()))
+                .match(GetTicket.class, msg ->
+                    fold(msg.getEvent(),
+                            empty -> getSender().tell(msg.emptyTicket(), getSelf()),
+                            child -> child.forward(new TicketSeller.Buy(msg.getTickets()), getContext())))
+                .match(CancelEvent.class, msg ->
+                    fold(msg.getName(),
+                            empty -> getSender().tell(msg.none(), getSelf()),
+                            child -> child.forward(new TicketSeller.Cancel(), getContext())))
+                .matchAny(o -> log.info("received unknown message."))
+                .build();
+    }
+
+    private void fold(String name, Consumer<ActorRef> isEmpty, Consumer<ActorRef> f) {
         Optional<ActorRef> child = getContext().findChild(name);
         if (!child.isPresent()) {
             isEmpty.accept(child.orElse(ActorRef.noSender()));
@@ -52,57 +82,20 @@ class BoxOffice extends AbstractActor {
         }
     }
 
-    @Override
-    public Receive createReceive() {
-        return receiveBuilder()
-                .match(CreateEvent.class, msg -> {
-                    fold(msg.getName(),
-                            empty -> msg.create(createTicketSeller(msg.getName()), getSender(), getSelf()),
-                            child -> getSender().tell(new EventExists(), getSelf()));
-                })
-                .match(GetEvent.class, msg -> {
-                    fold(msg.getName(),
-                            empty -> getSender().tell(Optional.empty(), getSelf()),
-                            child -> child.forward(new TicketSeller.GetEvent(), getContext()));
-                })
-                .match(GetEvents.class, msg -> {
-                    final List<Event> eventList = new ArrayList<>();
-                    getContext().getChildren().forEach(actor -> {
-                         Future<Object> f = Patterns.ask(actor, new TicketSeller.GetEvent(),1000);
-                         f.onSuccess(new OnSuccess<Object>() {
-                                     @Override
-                                     public void onSuccess(Object result) {
-                                         Event ev = (Event)result;
-                                         eventList.add(ev);
-                                     }
-                                 }, getContext().dispatcher());
-                        FiniteDuration delay = FiniteDuration.create(5, "second");
-                        Timeout timeout = new Timeout(delay);
-                        try {
-                            Await.ready(f, timeout.duration());
-                        } catch(Exception e) {
-                            log.error(e.toString());
-                        }
-                    });
-                    sender().tell(new Events(eventList), self());
-                })
-                .build();
-    }
-
-    public static @Data class Event {
+    static @Data class Event {
         private final String name;
         private final int tickets;
     }
 
-    public static @Value(staticConstructor = "of") class Events {
+    static @Value(staticConstructor = "of") class Events {
         private List<Event> events;
     }
 
-    public static @Data class CreateEvent {
+    static @Data class CreateEvent {
         final private String name;
         final private int tickets;
 
-        public void create(ActorRef seller, ActorRef sender, ActorRef receiver) {
+        void create(ActorRef seller, ActorRef sender, ActorRef receiver) {
             List<Ticket> newTickets =
                     IntStream.rangeClosed(1, tickets)
                             .mapToObj(Ticket::new)
@@ -113,25 +106,74 @@ class BoxOffice extends AbstractActor {
 
     }
 
-    public static @Data class GetEvent {
+    static @Data class GetEvent {
         private final String name;
+
+        Option<Event> none() {
+            return Option.none();
+        }
     }
 
-    public static @Data class GetEvents {}
+    static @Data class GetEvents {
+        Events getEvents(ActorContext context, LoggingAdapter log) {
+            final List<Event> eventList = new ArrayList<>();
+            context.getChildren().forEach(actor -> {
+                Future<Object> f = Patterns.ask(actor, new TicketSeller.GetEvent(), TIMEOUT_SEC);
+                f.onComplete(new EventMerger(eventList, log), context.dispatcher());
+                try {
+                    Await.ready(f, TIMEOUT_SEC.duration());
+                } catch(Exception e) {
+                    log.info(e.toString());
+                }
+            });
+            final List<Event> sortedEvents =
+                    eventList.stream()
+                            .sorted(Comparator.comparing(Event::getName))
+                            .collect(Collectors.toList());
+            return new Events(sortedEvents);
+        }
+    }
 
-    public static @Data class GetTickets {
+    private static class EventMerger extends OnComplete<Object> {
+        private final List<Event> events_;
+        LoggingAdapter log_;
+        EventMerger(List<Event> events, LoggingAdapter log) {
+            events_ = events;
+            log_ = log;
+        }
+        @Override
+        public void onComplete(Throwable failure, Object success) {
+            if (success != null) {
+                @SuppressWarnings("unchecked")
+                Event ev = ((Option<Event>) success).get();
+                events_.add(ev);
+            } else {
+                log_.error(failure.getMessage());
+            }
+        }
+    }
+
+    static @Data class GetTicket {
         private final String event;
         private final int tickets;
+
+        private TicketSeller.Tickets emptyTicket() {
+            return TicketSeller.Tickets.of(event, Collections.emptyList());
+        }
     }
 
-    public static @Data class CancelEvent {
+    static @Data class CancelEvent {
         private final String name;
+
+        Option<Event> none() {
+            return Option.none();
+        }
     }
 
     interface EventResponse {}
-    public static @Data class EventCreated implements EventResponse {
+    static @Data class EventCreated implements EventResponse {
         private final Event event;
     }
 
-    public static @Data class EventExists implements EventResponse {}
+    static @Data class EventExists implements EventResponse {}
 }

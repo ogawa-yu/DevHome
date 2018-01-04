@@ -2,11 +2,13 @@ package com.jgoticks;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.japi.Option;
 import akka.pattern.Patterns;
 import akka.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -44,6 +46,9 @@ public class TicketSellerTest extends TestKit {
 
         testActor.tell(new Buy(1), getRef());
         expectMsg(Tickets.of("event test_buy", makeTickets(1)));
+
+        testActor.tell(new Buy(3), getRef());
+        expectMsg(Tickets.of("event test_buy", Collections.emptyList()));
     }
 
     @Test
@@ -52,7 +57,7 @@ public class TicketSellerTest extends TestKit {
         Patterns.ask(testActor, new Add(makeTickets(5)), 3000);
 
         testActor.tell(new GetEvent(), getRef());
-        expectMsg(new BoxOffice.Event("event test_getEvent", 5));
+        expectMsg(Option.some(new BoxOffice.Event("event test_getEvent", 5)));
     }
 
     @Test
@@ -61,7 +66,7 @@ public class TicketSellerTest extends TestKit {
         testActor.tell(new Add(makeTickets(1000)),  getRef());
 
         testActor.tell(new Cancel(), getRef());
-        expectMsg(new BoxOffice.Event("event test_cancel",1000));
+        expectMsg(Option.some(new BoxOffice.Event("event test_cancel",1000)));
 
         testActor.tell(new Buy(1000),  getRef());
         expectNoMsg();
