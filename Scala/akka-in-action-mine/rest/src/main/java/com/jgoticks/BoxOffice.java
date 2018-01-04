@@ -3,20 +3,19 @@ package com.jgoticks;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.dispatch.OnComplete;
+import akka.dispatch.Futures;
 import akka.event.DiagnosticLoggingAdapter;
 import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import akka.japi.Option;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
 import lombok.Data;
 import lombok.Value;
 import scala.concurrent.Await;
+import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 import static com.jgoticks.TicketSeller.Add;
 import static com.jgoticks.TicketSeller.Ticket;
@@ -59,8 +59,16 @@ class BoxOffice extends AbstractActor {
                     fold(msg.getName(),
                             empty -> getSender().tell(msg.none(), getSelf()),
                             child -> child.forward(new TicketSeller.GetEvent(), getContext())))
-                .match(GetEvents.class, msg ->
-                    sender().tell(msg.getEvents(getContext(), log), getSelf()))
+                .match(GetEvents.class, msg -> {
+                    final ExecutionContext ec = getContext().getSystem().dispatcher();
+                    final Iterable<Future<Object>> fs = () -> StreamSupport
+                            .stream(getContext().getChildren().spliterator(), false)
+                            .map(actor -> Patterns.ask(getSelf(), new GetEvent(actor.path().name()), TIMEOUT_SEC))
+                            .iterator();
+                    final Future<Events> result = Futures.future(() ->
+                            convertToEvents(Await.result(Futures.sequence(fs, ec), TIMEOUT_SEC.duration())), ec);
+                    Patterns.pipe(result, ec).to(getSender());
+                })
                 .match(GetTicket.class, msg ->
                     fold(msg.getEvent(),
                             empty -> getSender().tell(msg.emptyTicket(), getSelf()),
@@ -71,6 +79,13 @@ class BoxOffice extends AbstractActor {
                             child -> child.forward(new TicketSeller.Cancel(), getContext())))
                 .matchAny(o -> log.info("received unknown message."))
                 .build();
+    }
+
+    private Events convertToEvents(Iterable<Object> result) {
+        return new Events(StreamSupport.stream(result.spliterator(), false)
+                .map(iter ->  ((Option<Event>)iter).get())
+                .sorted(Comparator.comparing(Event::getName))
+                .collect(Collectors.toList()));
     }
 
     private void fold(String name, Consumer<ActorRef> isEmpty, Consumer<ActorRef> f) {
@@ -114,44 +129,7 @@ class BoxOffice extends AbstractActor {
         }
     }
 
-    static @Data class GetEvents {
-        Events getEvents(ActorContext context, LoggingAdapter log) {
-            final List<Event> eventList = new ArrayList<>();
-            context.getChildren().forEach(actor -> {
-                Future<Object> f = Patterns.ask(actor, new TicketSeller.GetEvent(), TIMEOUT_SEC);
-                f.onComplete(new EventMerger(eventList, log), context.dispatcher());
-                try {
-                    Await.ready(f, TIMEOUT_SEC.duration());
-                } catch(Exception e) {
-                    log.info(e.toString());
-                }
-            });
-            final List<Event> sortedEvents =
-                    eventList.stream()
-                            .sorted(Comparator.comparing(Event::getName))
-                            .collect(Collectors.toList());
-            return new Events(sortedEvents);
-        }
-    }
-
-    private static class EventMerger extends OnComplete<Object> {
-        private final List<Event> events_;
-        LoggingAdapter log_;
-        EventMerger(List<Event> events, LoggingAdapter log) {
-            events_ = events;
-            log_ = log;
-        }
-        @Override
-        public void onComplete(Throwable failure, Object success) {
-            if (success != null) {
-                @SuppressWarnings("unchecked")
-                Event ev = ((Option<Event>) success).get();
-                events_.add(ev);
-            } else {
-                log_.error(failure.getMessage());
-            }
-        }
-    }
+    static @Data class GetEvents {}
 
     static @Data class GetTicket {
         private final String event;
