@@ -81,9 +81,10 @@ class BoxOffice extends AbstractActor {
                 .build();
     }
 
-    private Events convertToEvents(Iterable<Object> result) {
+    @SuppressWarnings("unchecked")
+    private static Events convertToEvents(Iterable<Object> result) {
         return new Events(StreamSupport.stream(result.spliterator(), false)
-                .map(iter ->  ((Option<Event>)iter).get())
+                .map(f ->  ((Option<Event>)f).get())
                 .sorted(Comparator.comparing(Event::getName))
                 .collect(Collectors.toList()));
     }

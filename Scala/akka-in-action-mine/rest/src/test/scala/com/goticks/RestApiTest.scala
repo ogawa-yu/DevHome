@@ -33,6 +33,10 @@ class RestApiTest extends WordSpec
         status == StatusCodes.OK
         responseAs[Event] shouldEqual Event("testEventA", 2)
       }
+      Post("/events/testEventA", eventDescriptionFormat.write(EventDescription(2))) ~> testRoutes ~> check {
+        status == StatusCodes.BadRequest
+        responseAs[Error] shouldEqual Error("testEventA event exists already.")
+      }
       Get("/events/testEventA/") ~> testRoutes ~> check {
         status == StatusCodes.OK
         responseAs[Event] shouldEqual Event("testEventA", 2)

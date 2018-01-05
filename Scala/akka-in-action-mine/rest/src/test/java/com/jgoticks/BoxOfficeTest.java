@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 import static com.jgoticks.BoxOffice.*;
 
-
+@SuppressWarnings("unchecked")
 public class BoxOfficeTest extends TestKit {
     private static ActorSystem system_ = ActorSystem.create();
     private static TestActorRef<BoxOffice> testActor_;
