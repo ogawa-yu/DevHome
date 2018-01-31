@@ -11,9 +11,9 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class FilesTest {
-    private final Pattern IMAGE_FILE = Pattern.compile("(.*).(img|png|bmp)");
-    private final Pattern TEXT_FILE = Pattern.compile("(.*).(txt|log)");
-
+    private final Pattern IMAGE_FILE = Pattern.compile("(\\w+[^.]).(img|png|bmp)");
+    private final Pattern TEXT_FILE = Pattern.compile("(\\w+[^.]).(txt|log)");
+    private final String TEXT_FILE_REGEX = "(\\w+[^.]).(txt|log)";
     @Test
     public void fileFindTest() throws Exception {
         Path cp = Paths.get(FilesTest.class.getResource("./").toURI());
@@ -29,7 +29,7 @@ public class FilesTest {
         Path cp = Paths.get(FilesTest.class.getResource("./").toURI());
         Stream<Path> fs = Files.find(cp, 1,
             (path, attr) -> {
-                return attr.isRegularFile() && TEXT_FILE.matcher(path.toString()).matches();
+                return attr.isRegularFile() && TEXT_FILE.matcher(path.toString()).find();
             });
         assertThat(fs.count(), is(1L));
     }
