@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.nio.file.Path;
+import java.nio.file.WatchEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DirectoryMonitor extends AbstractActor {
@@ -17,7 +19,7 @@ public class DirectoryMonitor extends AbstractActor {
         return receiveBuilder()
                 .match(RegisterMonitor.class, msg -> {
                     registerNotifier(msg.getFilePath())
-                            .tell(new DirectoryModificationNotifier.WatchDirectory(msg.getFilePath()), sender());
+                            .tell(new DirectoryModificationNotifier.WatchDirectory(msg.getFilePath(), msg.getEvents()), sender());
                 }).build();
     }
 
@@ -32,5 +34,6 @@ public class DirectoryMonitor extends AbstractActor {
 
     public static @Data @AllArgsConstructor class RegisterMonitor {
         private Path filePath;
+        private List<WatchEvent.Kind<?>> events;
     }
 }

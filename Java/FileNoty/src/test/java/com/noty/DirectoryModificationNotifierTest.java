@@ -3,53 +3,53 @@ package com.noty;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
-import akka.util.Timeout;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import scala.concurrent.duration.FiniteDuration;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static java.nio.file.Files.*;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DirectoryModificationNotifierTest extends TestKit {
-
-    private static Timeout timeout_;
-
     @BeforeClass
     public static void setupClass() {
-        FiniteDuration delay = FiniteDuration.create(5, "second");
-        timeout_ = new Timeout(delay);
     }
 
     public DirectoryModificationNotifierTest() {
         super(ActorSystem.create("TestSystem"));
     }
 
-    @Test
-    public void test_monitor() throws Exception {
-        ActorRef notifier = getSystem().actorOf(
-                DirectoryModificationNotifier.props(),
-                DirectoryModificationNotifier.name());
+    @After
+    public void teardown() {
+        getSystem().terminate();
+    }
 
+    @Test
+    public void test_fileCreated() throws Exception {
         Path targetPath = Paths.get(this.getClass().getResource("./").toURI());
 
+        ActorRef notifier = getSystem().actorOf(
+                DirectoryModificationNotifier.props(),
+                "test_monitor");
+        Path watchFile = targetPath.resolve("dummy_file.dat");
+
+        List<WatchEvent.Kind<?>> evs = new ArrayList<>();
+        evs.add(StandardWatchEventKinds.ENTRY_CREATE);
+
         notifier.tell(
-                new DirectoryModificationNotifier.WatchDirectory(targetPath),
+                new DirectoryModificationNotifier.WatchDirectory(watchFile, evs),
                 getRef());
-        write("created file from unittest", targetPath.resolve("dummy_file.dat"));
-        while(true) {}
-        //expectMsg(new DirectoryModificationNotifier.FileUpdated(targetPath));
+        write("created file from unittest", watchFile);
+        within(duration("15 second"), () -> expectMsg(new DirectoryModificationNotifier.OnCreated("dummy_file.dat")));
     }
 
     private static void write(String s, Path targetPath) throws IOException {
-        try (BufferedWriter bw = newBufferedWriter(targetPath, Charset.defaultCharset())) {
-            bw.write(s);
-        }
+        Files.write(targetPath, s.getBytes());
     }
 }
