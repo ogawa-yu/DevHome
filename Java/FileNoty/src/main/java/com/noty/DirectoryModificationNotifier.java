@@ -23,6 +23,8 @@ import java.util.function.Consumer;
 public class DirectoryModificationNotifier extends AbstractActor {
     private DiagnosticLoggingAdapter log_ = Logging.getLogger(this);
     private Map<WatchEvent.Kind<?>, Consumer<WatchEvent<?>>> eventToActions_;
+    private static Consumer<WatchEvent<?>> NULL_EVENT = (event -> {});
+
     public static String name() {
         return "DirectoryModificationNotifier";
     }
@@ -56,12 +58,8 @@ public class DirectoryModificationNotifier extends AbstractActor {
                 return;
             }
             key.pollEvents().forEach(event -> {
-                Consumer<WatchEvent<?>> ev = eventToActions_.get(event.kind());
-                if (ev == null) {
-                    log_.warning("invalid event:{}, {}", event.context().toString(), event.kind());
-                    return;
-                }
-                ev.accept(event);
+                Consumer<WatchEvent<?>> action = eventToActions_.getOrDefault(event.kind(), NULL_EVENT);
+                action.accept(event);
             });
         }).build();
     }
