@@ -1,4 +1,4 @@
-package com.jgoticks;
+package com.example;
 
 import org.junit.Test;
 
@@ -90,14 +90,5 @@ public class TestFileWatcher {
                 }
             }
         }
-    }
-
-    @Test
-    public void test() throws Exception {
-        DirWatcher testee = new DirWatcher();
-
-        @Mockup
-
-        testee.watch();
     }
 }
