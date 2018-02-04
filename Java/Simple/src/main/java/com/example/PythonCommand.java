@@ -1,5 +1,6 @@
 package com.example;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class PythonCommand {
         pyFile_ = pyFile;
     }
 
-    public PythonCommand append(String option) {
+    public PythonCommand option(String option) {
         options_.add(option);
         return this;
     }
@@ -24,10 +25,12 @@ public class PythonCommand {
         return this;
     }
 
-    public String build() {
+    public Process execute() throws IOException {
         List<String> command = new ArrayList<>();
+        command.add("python");
         command.add(pyFile_);
         command.addAll(options_);
-        return command.stream().reduce("python", (s1, s2) -> s1.concat(" " + s2));
+        ProcessBuilder builder = new ProcessBuilder(command);
+        return builder.start();
     }
 }

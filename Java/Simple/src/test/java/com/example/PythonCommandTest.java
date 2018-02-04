@@ -2,15 +2,21 @@ package com.example;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import java.nio.file.Paths;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class PythonCommandTest {
 
     @Test
-    public void test() throws Exception {
-        assertThat(PythonCommand.of("test.py").append("-include hoge").build(),
-                is("python test.py -include hoge"));
+    public void test_executePython() throws Exception {
+        String path = Paths.get(this.getClass().getResource("./").toURI()).resolve("test.py").toString();
+        Process proc = PythonCommand.of(path)
+            .option("-include hoge")
+            .execute();
+        int code = proc.waitFor();
+        assertThat(code, is(0));
     }
 
 }

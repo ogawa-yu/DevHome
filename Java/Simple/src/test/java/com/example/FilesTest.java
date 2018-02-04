@@ -21,7 +21,7 @@ public class FilesTest {
             (path, attr) -> {
                 return attr.isRegularFile() && IMAGE_FILE.matcher(path.toString()).matches();
             });
-        assertThat(fs.count(), is(1L));
+        assertThat(fs.count(), is(0L));
     }
 
     @Test
