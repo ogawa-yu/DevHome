@@ -1,7 +1,7 @@
 #include <iostream>
 
 int fib(int n) {
-    int f, f0 = 1, f1 = 1;
+    int f = 1, f0 = 1, f1 = 1;
     while(n > 1) {
         n = n - 1;
         f = f0 + f1;
