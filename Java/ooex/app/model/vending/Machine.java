@@ -1,7 +1,12 @@
-package org.vending;
+package model.vending;
 
-public class VendingMachine {
+import akka.actor.AbstractActor;
+import model.vending.message.Buy;
+import model.vending.message.Drink;
+import model.vending.message.Refund;
+import model.vending.message.Value;
 
+public class Machine extends AbstractActor {
     int quantityOfCoke = 5; // コーラの在庫数
     int quantityOfDietCoke = 5; // ダイエットコーラの在庫数
     int quantityOfTea = 5; // お茶の在庫数
@@ -61,14 +66,13 @@ public class VendingMachine {
         return new Drink(kindOfDrink);
     }
 
-    /**
-     * お釣りを取り出す.
-     *
-     * @return お釣りの金額
-     */
-    public int refund() {
-        int result = charge;
-        charge = 0;
-        return result;
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder().match(Buy.class, msg -> {
+            sender().tell(buy(msg.getDiscount(), msg.getDrinkType()), self());
+        }).match(Refund.class, msg -> {
+            sender().tell(Value.of(charge), self());
+            charge = 0;
+        }).build();
     }
 }

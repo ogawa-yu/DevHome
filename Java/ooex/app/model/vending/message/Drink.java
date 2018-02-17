@@ -1,4 +1,4 @@
-package org.vending;
+package model.vending.message;
 
 public class Drink {
 
