@@ -1,7 +1,5 @@
 package org.vending;
 
-package vending;
-
 public class VendingMachine {
 
     int quantityOfCoke = 5; // コーラの在庫数
