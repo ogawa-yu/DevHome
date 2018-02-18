@@ -1,5 +1,11 @@
-@()
+@(message: String)
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+@main(message) {
+
+  @*
+   * Get an `Html` object by calling the built-in Play welcome
+   * template and passing a `String` message.
+   *@
+    
+    <img src="@routes.Assets.versioned("images/vending_machine.png")" />
 }
