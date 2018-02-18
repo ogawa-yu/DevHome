@@ -1,4 +1,7 @@
 package model.vending.message;
 
-public class Refund {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Refund implements Serializable {
 }

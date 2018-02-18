@@ -1,6 +1,9 @@
 package model.vending.message;
 
-public class Buy {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Buy implements Serializable{
     private final int drinkType_;
     private final int discount_;
 

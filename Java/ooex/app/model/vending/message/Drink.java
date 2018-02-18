@@ -1,12 +1,15 @@
 package model.vending.message;
 
-public class Drink {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Drink implements Serializable {
 
     public static final int COKE = 0;
     public static final int DIET_COKE = 1;
     public static final int TEA = 2;
 
-    private int kind;
+    private final int kind;
 
     public Drink(int kind) {
         this.kind = kind;
