@@ -3,8 +3,8 @@
   The settings outDir and rootDir are managed by sbt-typescript.
   */
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
+    "target": "es5",
+    "module": "system",
     "moduleResolution": "node",
     /* the following two settings are required for angular2 annotations to work*/
     "emitDecoratorMetadata": true,
