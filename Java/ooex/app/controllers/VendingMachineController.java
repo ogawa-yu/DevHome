@@ -8,7 +8,7 @@ import javax.inject.Named;
 import model.vending.message.Buy;
 import model.vending.message.Drink;
 import model.vending.message.Refund;
-import model.vending.message.Value;
+import model.vending.message.Money;
 import modules.ActorModule;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -30,7 +30,7 @@ public class VendingMachineController extends Controller{
     }
 
     public Result refund() throws Exception {
-        return ok(Json.toJson(wait(Value.class, new Refund())));
+        return ok(Json.toJson(wait(Money.class, new Refund())));
     }
 
     private Object wait(Class<?> clazz, Object message) throws Exception {

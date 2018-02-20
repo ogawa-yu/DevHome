@@ -1,3 +1,5 @@
+import scala.collection.JavaConverters._
+
 name := """ooex"""
 organization := "org.ooex"
 
@@ -18,7 +20,7 @@ libraryDependencies ++= {
   Seq(
     guice,
     ehcache,
-    "com.typesafe.play" %% "play-json" % "2.6.",
+    "com.typesafe.play" %% "play-json" % "2.6.1",
     //angular2 dependencies
     "org.webjars.npm" % "angular__common" % ngVersion,
     "org.webjars.npm" % "angular__compiler" % ngVersion,
@@ -37,18 +39,18 @@ libraryDependencies ++= {
     "org.webjars.npm" % "typescript" % "2.7.1",
     "org.webjars.npm" % "react" % "15.4.0",
     "org.webjars.npm" % "types__react" % "15.0.34",
-
+    //lombok
+    "org.projectlombok" % "lombok" % "1.16.16",
     //tslint dependency
     "org.webjars.npm" % "tslint-eslint-rules" % "3.4.0",
     "org.webjars.npm" % "tslint-microsoft-contrib" % "4.0.0",
     //"org.webjars.npm" % "codelyzer" % "3.1.1", see below
     "org.webjars.npm" % "types__jasmine" % "2.5.53" % "test",
     //test
-    "org.webjars.npm" % "jasmine-core" % "2.6.4"
-
-    //"org.webjars" % "requirejs" % "2.2.0",
-    //"org.webjars" % "jquery" % "2.1.1",
-    //"org.webjars" % "bootstrap" % "3.1.1-1"
+    "org.webjars.npm" % "jasmine-core" % "2.6.4",
+    "com.typesafe.akka" %% "akka-testkit" % "2.5.8" % "test",
+    "junit" % "junit" % "4.12" % "test",
+    "com.novocode" % "junit-interface" % "0.11" % "test"
   )
 }
 dependencyOverrides ++= Seq(
