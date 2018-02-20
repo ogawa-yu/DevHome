@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @Value(staticConstructor = "of")
-public class Buy implements Serializable{
+public class Buy implements Serializable {
     private final int drinkType;
     private final int amount;
 }

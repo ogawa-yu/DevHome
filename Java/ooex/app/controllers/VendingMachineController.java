@@ -5,12 +5,16 @@ import akka.pattern.Patterns;
 import akka.util.Timeout;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
 import model.vending.message.Drink;
 import model.vending.message.Refund;
 import model.vending.message.Money;
 import modules.ActorModule;
 import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import scala.concurrent.Await;
@@ -21,12 +25,20 @@ import scala.reflect.ClassTag;
 import java.util.concurrent.TimeUnit;
 
 public class VendingMachineController extends Controller{
-
     @Inject @Named(ActorModule.VENDING_MACHINE_ACTOR)
     private ActorRef vendingMachine_;
 
-    public Result buy(int discount, int type) throws Exception {
-        return ok(Json.toJson(wait(Drink.class, Buy.of(type, discount))));
+    public Result allDrinks() throws Exception {
+        return ok(Json.toJson(wait(Object.class, new AllDrinks())));
+    }
+
+    public Result buy() throws Exception {
+        JsonNode json = request().body().asJson();
+        if(json == null) {
+            return badRequest("Expecting Json data");
+        }
+        Buy body = Buy.of(json.findPath("drinkType").intValue(), json.findPath("amount").intValue());
+        return ok(Json.toJson(wait(Drink.class, body)));
     }
 
     public Result refund() throws Exception {
@@ -37,7 +49,7 @@ public class VendingMachineController extends Controller{
         FiniteDuration duration = Duration.create(5, TimeUnit.SECONDS);
         return Await.result(
                 Patterns.ask(vendingMachine_, message, new Timeout(duration))
-                        .mapTo(new ClassTag<Drink>() {
+                        .mapTo(new ClassTag() {
                             @Override
                             public Class<?> runtimeClass() {
                                 return clazz;

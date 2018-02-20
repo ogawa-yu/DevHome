@@ -1,10 +1,14 @@
 package model.vending;
 
 import akka.actor.AbstractActor;
+import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
 import model.vending.message.Drink;
 import model.vending.message.Money;
 import model.vending.message.Refund;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Machine extends AbstractActor {
     int quantityOfCoke = 5; // コーラの在庫数
@@ -76,7 +80,10 @@ public class Machine extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(Buy.class, msg -> {
+        return receiveBuilder().match(AllDrinks.class, msg -> {
+            List<Integer> drinks = Arrays.asList(Drink.COKE, Drink.DIET_COKE, Drink.TEA);
+            sender().tell(drinks, self());
+        }).match(Buy.class, msg -> {
             Drink drink = buy(msg.getAmount(), msg.getDrinkType());
             sender().tell(drink, self());
         }).match(Refund.class, msg -> {

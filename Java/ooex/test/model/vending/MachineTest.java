@@ -3,15 +3,28 @@ package model.vending;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.pattern.Patterns;
 import akka.testkit.javadsl.TestKit;
+import akka.util.Timeout;
+import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
 import model.vending.message.Drink;
 import model.vending.message.Money;
 import model.vending.message.Refund;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Test;
+import scala.concurrent.Await;
+import scala.concurrent.duration.Duration;
+import scala.concurrent.duration.FiniteDuration;
+import scala.reflect.ClassTag;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
+
+import static org.junit.Assert.assertThat;
 
 /**
  * 下記の仕様を確認する <br>
@@ -30,6 +43,32 @@ public class MachineTest extends TestKit{
     @AfterClass
     public static void teardownClass() {
         system_.terminate();
+    }
+
+    @Test
+    public void test_all_drinks() {
+        ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_all_drinks");
+
+        testee.tell(new AllDrinks(), getRef());
+
+        expectMsg(Arrays.asList(Drink.COKE, Drink.DIET_COKE, Drink.TEA));
+    }
+
+    @Test
+    public void test_all_drinks_case_await() throws Exception {
+        ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_all_drinks_case_await");
+
+        FiniteDuration duration = Duration.create(5, TimeUnit.SECONDS);
+        List<Integer> actual = Await.result(
+                Patterns.ask(testee, new AllDrinks(), new Timeout(duration))
+                        .mapTo(new ClassTag<List>() {
+                            @Override
+                            public Class<?> runtimeClass() {
+                                return List.class;
+                            }}),
+                duration);
+        List<Integer> expected = Arrays.asList(Drink.COKE, Drink.DIET_COKE, Drink.TEA);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -179,7 +218,7 @@ public class MachineTest extends TestKit{
         });
         testee.tell(Buy.of(kind, 100), getRef());
         expectMsg(Drink.empty());
-        
+
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(100));
 
