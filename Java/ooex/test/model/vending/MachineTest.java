@@ -48,6 +48,17 @@ public class MachineTest extends TestKit{
     }
 
     @Test
+    public void test_buy_case_invalid_drink_kind() {
+        ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_invalid_drink_kind");
+
+        testee.tell(new Buy(-9999, 100), getRef());
+        expectMsg(Drink.empty());
+
+        testee.tell(new Refund(), getRef());
+        expectMsg(Money.of(100));
+    }
+
+    @Test
     public void test_buy_case_coke() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_coke");
 

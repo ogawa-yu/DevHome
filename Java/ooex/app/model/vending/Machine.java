@@ -18,10 +18,18 @@ public class Machine extends AbstractActor {
      *
      * @param i           投入金額. 100円と500円のみ受け付ける.
      * @param kindOfDrink ジュースの種類.
-     *                    コーラ({@code Juice.COKE}),ダイエットコーラ({@code Juice.DIET_COKE},お茶({@code Juice.TEA})が指定できる.
+     *                    コーラ({@code Drink.COKE}),ダイエットコーラ({@code Drink.DIET_COKE},お茶({@code Drink.TEA})が指定できる.
      * @return 指定したジュース. 在庫不足や釣り銭不足で買えなかった場合は {@code null} が返される.
      */
     public Drink buy(int i, int kindOfDrink) {
+        // 決められたジュースの種類以外は購入できない。
+        if ((kindOfDrink != Drink.COKE) &&
+                (kindOfDrink != Drink.DIET_COKE) &&
+                (kindOfDrink != Drink.TEA)) {
+            charge += i;
+            return Drink.empty();
+        }
+
         // 100円と500円だけ受け付ける
         if ((i != 100) && (i != 500)) {
             charge += i;
