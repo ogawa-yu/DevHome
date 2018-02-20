@@ -26,7 +26,7 @@ public class VendingMachineController extends Controller{
     private ActorRef vendingMachine_;
 
     public Result buy(int discount, int type) throws Exception {
-        return ok(Json.toJson(wait(Drink.class, new Buy(type, discount))));
+        return ok(Json.toJson(wait(Drink.class, Buy.of(type, discount))));
     }
 
     public Result refund() throws Exception {
