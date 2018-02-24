@@ -9,5 +9,5 @@ import java.io.Serializable;
 @Data(staticConstructor = "of")
 public class Buy implements Serializable {
     private final DrinkKind drinkType;
-    private final int amount;
+    private final Money amount;
 }

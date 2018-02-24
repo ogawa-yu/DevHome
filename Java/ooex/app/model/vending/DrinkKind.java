@@ -1,7 +1,5 @@
 package model.vending;
 
-import model.vending.message.Drink;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

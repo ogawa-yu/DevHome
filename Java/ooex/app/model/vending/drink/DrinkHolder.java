@@ -1,4 +1,4 @@
-package model.vending;
+package model.vending.drink;
 
 import model.vending.message.Drink;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-class DrinkHolder {
+public class DrinkHolder {
     private final int MAX_COUNT = 5;
     private final List<Drink> stock_;
 
@@ -15,6 +15,9 @@ class DrinkHolder {
     }
 
     public Drink take() {
+        if (stockout()) {
+            return Drink.empty();
+        }
         return stock_.remove(stock_.size() - 1);
     }
 
@@ -26,7 +29,7 @@ class DrinkHolder {
         IntStream.range(0, count).forEach(i -> charge(drink));
     }
 
-    public boolean hasStock() {
-        return !stock_.isEmpty();
+    public boolean stockout() {
+        return stock_.isEmpty();
     }
 }
