@@ -1,13 +1,13 @@
 package model.vending.message;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Data;
+import model.vending.DrinkKind;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-@Value(staticConstructor = "of")
+@Data(staticConstructor = "of")
 public class Buy implements Serializable {
-    private final int drinkType;
+    private final DrinkKind drinkType;
     private final int amount;
 }

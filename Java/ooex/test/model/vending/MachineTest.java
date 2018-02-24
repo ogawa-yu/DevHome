@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertThat;
-
 /**
  * 下記の仕様を確認する <br>
  * - 購入できるのは コーラ・ダイエットコーラ・紅茶のみ。 <br>
@@ -51,7 +49,7 @@ public class MachineTest extends TestKit{
 
         testee.tell(new AllDrinks(), getRef());
 
-        expectMsg(Arrays.asList(Drink.COKE, Drink.DIET_COKE, Drink.TEA));
+        expectMsg(DrinkKind.valueList());
     }
 
     @Test
@@ -67,7 +65,7 @@ public class MachineTest extends TestKit{
                                 return List.class;
                             }}),
                 duration);
-        List<Integer> expected = Arrays.asList(Drink.COKE, Drink.DIET_COKE, Drink.TEA);
+        List<Integer> expected = DrinkKind.valueList();
         Assert.assertEquals(expected, actual);
     }
 
@@ -75,7 +73,7 @@ public class MachineTest extends TestKit{
     public void test_buy_case_zero_yen() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_zero_count");
 
-        testee.tell(Buy.of(Drink.COKE, 0), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 0), getRef());
         expectMsg(Drink.empty());
     }
 
@@ -83,7 +81,7 @@ public class MachineTest extends TestKit{
     public void test_buy_case_less_money() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_less_money");
 
-        testee.tell(Buy.of(Drink.COKE, 99), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 99), getRef());
         expectMsg(Drink.empty());
     }
 
@@ -91,7 +89,7 @@ public class MachineTest extends TestKit{
     public void test_buy_case_invalid_amount() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_invalid_amount");
 
-        testee.tell(Buy.of(Drink.COKE, 150), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 150), getRef());
         expectMsg(Drink.empty());
     }
 
@@ -99,7 +97,7 @@ public class MachineTest extends TestKit{
     public void test_buy_case_invalid_drink_kind() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_invalid_drink_kind");
 
-        testee.tell(Buy.of(-9999, 100), getRef());
+        testee.tell(Buy.of(DrinkKind.UNDEF, 100), getRef());
         expectMsg(Drink.empty());
 
         testee.tell(new Refund(), getRef());
@@ -110,24 +108,24 @@ public class MachineTest extends TestKit{
     public void test_buy_case_coke() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_coke");
 
-        testee.tell(Buy.of(Drink.COKE, 100), getRef());
-        expectMsg(Drink.of(Drink.COKE));
+        testee.tell(Buy.of(DrinkKind.COKE, 100), getRef());
+        expectMsg(new Drink(DrinkKind.COKE));
     }
 
     @Test
     public void test_buy_case_tea() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_tea");
 
-        testee.tell(Buy.of(Drink.TEA, 100), getRef());
-        expectMsg(Drink.of(Drink.TEA));
+        testee.tell(Buy.of(DrinkKind.TEA, 100), getRef());
+        expectMsg(new Drink(DrinkKind.TEA));
     }
 
     @Test
     public void test_buy_case_diet_coke() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_diet_coke");
 
-        testee.tell(Buy.of(Drink.DIET_COKE, 100), getRef());
-        expectMsg(Drink.of(Drink.DIET_COKE));
+        testee.tell(Buy.of(DrinkKind.DIET_COKE, 100), getRef());
+        expectMsg(new Drink(DrinkKind.DIET_COKE));
     }
 
     @Test
@@ -142,7 +140,7 @@ public class MachineTest extends TestKit{
     public void test_refund_case_after_buy_juice_less_amount() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_refund_case_after_buy_juice_less_amount");
 
-        testee.tell(Buy.of(Drink.COKE, 99), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 99), getRef());
         expectMsg(Drink.empty());
 
         testee.tell(new Refund(), getRef());
@@ -153,8 +151,8 @@ public class MachineTest extends TestKit{
     public void test_refund_case_after_buy_juice_just_amount() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_refund_case_after_buy_juice_just_amount");
 
-        testee.tell(Buy.of(Drink.DIET_COKE, 100), getRef());
-        expectMsg(Drink.of(Drink.DIET_COKE));
+        testee.tell(Buy.of(DrinkKind.DIET_COKE, 100), getRef());
+        expectMsg(new Drink(DrinkKind.DIET_COKE));
 
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(0));
@@ -164,8 +162,8 @@ public class MachineTest extends TestKit{
     public void test_refund_case_after_buy_juice_more_amount() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_refund_case_after_buy_juice_more_amount");
 
-        testee.tell(Buy.of(Drink.TEA, 500), getRef());
-        expectMsg(Drink.of(Drink.TEA));
+        testee.tell(Buy.of(DrinkKind.TEA, 500), getRef());
+        expectMsg(new Drink(DrinkKind.TEA));
 
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(400));
@@ -175,7 +173,7 @@ public class MachineTest extends TestKit{
     public void test_refund_case_invalid_amount() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_refund_case_invalid_amount");
 
-        testee.tell(Buy.of(Drink.COKE, 150), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 150), getRef());
         expectMsg(Drink.empty());
 
         testee.tell(new Refund(), getRef());
@@ -186,17 +184,17 @@ public class MachineTest extends TestKit{
     public void test_buy_case_poor_change() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_poor_change");
 
-        testee.tell(Buy.of(Drink.COKE, 500), getRef());
-        expectMsg(Drink.of(Drink.COKE));
+        testee.tell(Buy.of(DrinkKind.COKE, 500), getRef());
+        expectMsg(new Drink(DrinkKind.COKE));
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(400));
 
-        testee.tell(Buy.of(Drink.COKE, 500), getRef());
-        expectMsg(Drink.of(Drink.COKE));
+        testee.tell(Buy.of(DrinkKind.COKE, 500), getRef());
+        expectMsg(new Drink(DrinkKind.COKE));
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(400));
 
-        testee.tell(Buy.of(Drink.COKE, 500), getRef());
+        testee.tell(Buy.of(DrinkKind.COKE, 500), getRef());
         expectMsg(Drink.empty());
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(500));
@@ -206,21 +204,20 @@ public class MachineTest extends TestKit{
     public void test_buy_case_poor_stock() {
         ActorRef testee = getSystem().actorOf(Props.create(Machine.class), "test_buy_case_poor_stock");
 
-        test_poor_stock(testee, Drink.COKE);
-        test_poor_stock(testee, Drink.DIET_COKE);
-        test_poor_stock(testee, Drink.TEA);
+        test_poor_stock(testee, DrinkKind.COKE);
+        test_poor_stock(testee, DrinkKind.DIET_COKE);
+        test_poor_stock(testee, DrinkKind.TEA);
     }
 
-    private void test_poor_stock(ActorRef testee, int kind) {
+    private void test_poor_stock(ActorRef testee, DrinkKind kind) {
         IntStream.range(0, 5).forEach(i ->{
             testee.tell(Buy.of(kind, 100), getRef());
-            expectMsg(Drink.of(kind));
+            expectMsg(new Drink(kind));
         });
         testee.tell(Buy.of(kind, 100), getRef());
         expectMsg(Drink.empty());
 
         testee.tell(new Refund(), getRef());
         expectMsg(Money.of(100));
-
     }
 }
