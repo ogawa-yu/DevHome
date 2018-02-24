@@ -12,6 +12,7 @@ import modules.ActorModule;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -21,7 +22,7 @@ public class VendingMachineController extends Controller{
     ActorRef vendingMachine_;
 
     public Result allDrinks() throws Exception {
-        return ok(Json.toJson(Messaging.wait(Object.class, new AllDrinks(), vendingMachine_)));
+        return ok(messagingAsJson(Object.class, new AllDrinks()));
     }
 
     public Result buy() throws Exception {
@@ -30,10 +31,14 @@ public class VendingMachineController extends Controller{
             return badRequest("Expecting Json data");
         }
         Buy body = Buy.of(json.findPath("drinkType").intValue(), json.findPath("amount").intValue());
-        return ok(Json.toJson(Messaging.wait(Drink.class, body, vendingMachine_)));
+        return ok(messagingAsJson(Drink.class, body));
     }
 
     public Result refund() throws Exception {
-        return ok(Json.toJson(Messaging.wait(Money.class, new Refund(), vendingMachine_)));
+        return ok(messagingAsJson(Money.class, new Refund()));
+    }
+
+    private <T> JsonNode messagingAsJson(Class<?> type, T message) throws Exception {
+        return Json.toJson(Messaging.wait(type, message, vendingMachine_));
     }
 }
