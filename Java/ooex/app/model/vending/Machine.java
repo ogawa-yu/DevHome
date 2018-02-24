@@ -24,11 +24,6 @@ public class Machine extends AbstractActor {
      * @return 指定したジュース. 在庫不足や釣り銭不足で買えなかった場合は {@code null} が返される.
      */
     public Drink buy(int amount, int kindOfDrink) {
-        if (DrinkKind.notFound(kindOfDrink)) {
-            charge += amount;
-            return Drink.empty();
-        }
-
         // 100円と500円だけ受け付ける
         if ((amount != 100) && (amount != 500)) {
             charge += amount;

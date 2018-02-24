@@ -22,12 +22,6 @@ public enum DrinkKind {
         return type_;
     }
 
-    public static boolean notFound(int type) {
-        return Arrays.stream(values())
-                .filter(e -> e != UNDEF)
-                .allMatch(e -> e.getType() != type);
-    }
-
     public static DrinkKind fromType(int type) {
         return Arrays.stream(values())
                 .filter(kind -> kind.getType() == type)
