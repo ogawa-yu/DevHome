@@ -2,7 +2,6 @@ package model.vending.coin;
 
 import model.vending.message.Money;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,8 +15,8 @@ class CoinStorage {
 
     CoinStorage(int count, Money money) {
         storage_ = IntStream.range(0, count)
-                    .mapToObj(i -> Money.of(money.getValue()))
-                    .collect(Collectors.toList());
+                .mapToObj(i -> Money.of(money.getValue()))
+                .collect(Collectors.toList());
     }
 
     public boolean hasCoins(int count) {
@@ -37,11 +36,9 @@ class CoinStorage {
     }
 
     public List<Money> takeAll() {
-        List<Money> destination = new ArrayList<>();
-        while (storage_.size() > 0) {
-            destination.add(take());
-        }
-        return destination;
+        return IntStream.range(0, storage_.size())
+                .mapToObj(i -> take())
+                .collect(Collectors.toList());
     }
 
     public void store(Money coin) {

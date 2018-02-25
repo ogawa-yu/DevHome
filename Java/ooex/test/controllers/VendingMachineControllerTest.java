@@ -47,6 +47,6 @@ public class VendingMachineControllerTest extends WithApplication {
 
         result = route(app, request);
         assertEquals(OK, result.status());
-        assertEquals(Helpers.contentAsString(result), "{\"value\":90}");
+        assertEquals(Helpers.contentAsString(result), "{\"paybacks\":[{\"value\":90}]}");
     }
 }

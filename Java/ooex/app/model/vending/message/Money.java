@@ -1,5 +1,6 @@
 package model.vending.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 public class Money implements Serializable {
     private final int value;
 
+    @JsonIgnore
     public boolean isValid() {
         return value > 0;
     }
