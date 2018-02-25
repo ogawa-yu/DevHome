@@ -39,6 +39,18 @@ public class CoinStorageTest {
     }
 
     @Test
+    public void test_zeroCoins() {
+        CoinStorage testee = new CoinStorage(0, Money.of(100));
+        assertTrue(testee.hasCoins(0));
+        assertFalse(testee.hasCoins(1));
+
+        Money actual = testee.take();
+        assertThat(actual, is(Money.of(0)));
+
+        assertTrue(testee.takeAll().isEmpty());
+    }
+
+        @Test
     public void test_takeAll() {
         CoinStorage testee = new CoinStorage(5, Money.of(100));
         List<Money> actual = testee.takeAll();

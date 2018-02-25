@@ -11,17 +11,13 @@ class CoinStorage {
     private List<Money> storage_;
 
     CoinStorage() {
-        storage_ = new ArrayList<>();
+        this(0, Money.of(0));
     }
 
     CoinStorage(int count, Money money) {
-        if (count <= 0) {
-            storage_ = new ArrayList<>();
-        } else {
-            storage_ = IntStream.range(0, count)
+        storage_ = IntStream.range(0, count)
                     .mapToObj(i -> Money.of(money.getValue()))
                     .collect(Collectors.toList());
-        }
     }
 
     public boolean hasCoins(int count) {

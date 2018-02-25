@@ -1,6 +1,5 @@
 package model.vending.coin;
 
-import akka.event.Logging;
 import model.vending.message.Money;
 
 import java.util.HashMap;
@@ -9,7 +8,7 @@ import java.util.Map;
 class SeparatedSafe {
     private Map<Money, CoinStorage> storage_;
 
-    public SeparatedSafe() {
+    SeparatedSafe() {
         storage_ = new HashMap<>();
     }
 
