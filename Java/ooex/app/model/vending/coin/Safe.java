@@ -17,15 +17,14 @@ public class Safe {
     }
 
     public boolean available(Money amount) {
-        if (!bank_.available(amount)) {
+        if (!bank_.hasStorage(amount)) {
             return false;
         }
+        return canRefund(amount);
+    }
 
-        if (amount.equals(JP_100_YEN)) {
-            return true;
-        }
-
-        return bank_.canRefund(amount, JP_100_YEN);
+    private boolean canRefund(Money amount) {
+        return amount.equals(JP_100_YEN) || bank_.canRefund(amount, JP_100_YEN);
     }
 
     public void storeToPaybackable(Money amount) {

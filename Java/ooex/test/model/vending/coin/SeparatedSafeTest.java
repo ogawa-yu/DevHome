@@ -10,20 +10,20 @@ import static org.junit.Assert.assertTrue;
 
 public class SeparatedSafeTest {
     @Test
-    public void test_unavailable() {
+    public void test_unhasStorage() {
         SeparatedSafe testee = new SeparatedSafe();
-        assertFalse(testee.available(Money.of(0)));
+        assertFalse(testee.hasStorage(Money.of(0)));
 
         testee.addStorage(Money.of(100), 0);
-        assertTrue(testee.available(Money.of(100)));
+        assertTrue(testee.hasStorage(Money.of(100)));
     }
 
     @Test
-    public void test_available() {
+    public void test_hasStorage() {
         SeparatedSafe testee = new SeparatedSafe();
         testee.addStorage(Money.of(100), 1);
 
-        assertTrue(testee.available(Money.of(100)));
+        assertTrue(testee.hasStorage(Money.of(100)));
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -42,7 +42,7 @@ public class SeparatedSafeTest {
         testee.cache(Money.of(100));
         Money actual = testee.take(Money.of(100), Money.of(200));
         assertThat(actual, is(Money.of(100)));
-        assertTrue(testee.available(Money.of(100)));
+        assertTrue(testee.hasStorage(Money.of(100)));
     }
 
     @Test

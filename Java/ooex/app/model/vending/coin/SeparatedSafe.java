@@ -19,7 +19,7 @@ class SeparatedSafe {
         storage_.put(money, new CoinStorage(count, money));
     }
 
-    public boolean available(Money money) {
+    public boolean hasStorage(Money money) {
         return storage_.containsKey(money);
     }
 
