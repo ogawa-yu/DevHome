@@ -37,12 +37,10 @@ public class Safe {
     }
 
     public Drink payoff(Drink drink, Money amount) {
-        storeToPaybackable(bank_.take(drink.getValue(), amount));
-        cache(amount);
-        return drink;
-    }
-
-    private void cache(Money amount) {
+        Money drinkVaue = drink.getValue();
+        Money payback = bank_.take(drinkVaue, amount);
+        storeToPaybackable(payback);
         bank_.cache(amount);
+        return drink;
     }
 }
