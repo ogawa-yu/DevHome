@@ -1,44 +1,50 @@
 package controllers;
 
 import akka.actor.ActorRef;
-import com.fasterxml.jackson.databind.JsonNode;
-import model.actor.Messaging;
+import akka.pattern.Patterns;
+import model.vending.coin.Money;
+import model.vending.drink.DrinkKind;
 import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
-import model.vending.message.Drink;
-import model.vending.message.Money;
+import model.vending.message.Pay;
 import model.vending.message.Refund;
 import modules.ActorModule;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import scala.compat.java8.FutureConverters;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.concurrent.CompletionStage;
 
-public class VendingMachineController extends Controller{
+public class VendingMachineController extends Controller {
+    private ActorRef vendingMachine_;
+    private static final long TIMEOUT = 1000;
     @Inject
-    @Named(ActorModule.VENDING_MACHINE_ACTOR)
-    ActorRef vendingMachine_;
-
-    public Result allDrinks() throws Exception {
-        return ok(messagingAsJson(Object.class, new AllDrinks()));
+    public VendingMachineController(@Named(ActorModule.VENDING_MACHINE_ACTOR) ActorRef actor) {
+        vendingMachine_ = actor;
     }
 
-    public Result buy() throws Exception {
-        JsonNode json = request().body().asJson();
-        if(json == null) {
-            return badRequest("Expecting Json data");
-        }
-        Buy body = Buy.of(json.findPath("drinkType").intValue(), json.findPath("amount").intValue());
-        return ok(messagingAsJson(Drink.class, body));
+    public CompletionStage<Result> allDrinks() {
+        return handleMessage(new AllDrinks());
     }
 
-    public Result refund() throws Exception {
-        return ok(messagingAsJson(Money.class, new Refund()));
+    public CompletionStage<Result> pay(int amount) {
+        return handleMessage(Pay.of(Money.of(amount)));
     }
 
-    private <T> JsonNode messagingAsJson(Class<?> type, T message) throws Exception {
-        return Json.toJson(Messaging.wait(type, message, vendingMachine_));
+    public CompletionStage<Result> buy(int kind) {
+        return handleMessage(Buy.of(DrinkKind.fromType(kind)));
+    }
+
+    public CompletionStage<Result> refund() {
+        return handleMessage(new Refund());
+    }
+
+    private <T> CompletionStage<Result> handleMessage(T message) {
+        return FutureConverters.toJava(
+                Patterns.ask(vendingMachine_, message, TIMEOUT))
+                .thenApply(response -> ok(Json.toJson(response)));
     }
 }
