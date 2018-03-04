@@ -16,7 +16,7 @@ public class HttpRequestHandler extends DefaultHttpRequestHandler {
 
     @Override
     public HandlerForRequest handlerForRequest(Http.RequestHeader request) {
-        Logger.trace(request.uri());
+        Logger.trace("Request: {}", request.uri());
         return super.handlerForRequest(request);
     }
 }
