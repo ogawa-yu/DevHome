@@ -1,6 +1,6 @@
 package model.vending.drink;
 
-import model.vending.message.Drink;
+import model.vending.coin.Money;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +31,12 @@ public class DrinkHolder {
 
     public boolean stockout() {
         return stock_.isEmpty();
+    }
+
+    public boolean canBuy(Money amount) {
+        if (stockout()) {
+            return false;
+        }
+        return stock_.get(0).canBuy(amount);
     }
 }

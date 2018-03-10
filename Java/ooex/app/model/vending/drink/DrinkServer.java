@@ -1,12 +1,14 @@
 package model.vending.drink;
 
-import model.vending.DrinkKind;
-import model.vending.drink.DrinkHolder;
-import model.vending.message.Drink;
+import model.vending.message.Buyable;
+import model.vending.coin.Money;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DrinkServer {
     private final Map<DrinkKind, DrinkHolder> server_;
@@ -27,12 +29,21 @@ public class DrinkServer {
         if (!server_.containsKey(kind)) {
             return true;
         }
-
         DrinkHolder holder = server_.get(kind);
         return holder.stockout();
     }
 
     public DrinkHolder select(DrinkKind kind) {
         return server_.getOrDefault(kind, EMPTY_HOLDER);
+    }
+
+    public Buyable buyable(Money amount) {
+        List<DrinkKind> buyableDrinks = server_.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().canBuy(amount))
+                .map(Map.Entry::getKey)
+                .sorted(Comparator.comparing(DrinkKind::getType))
+                .collect(Collectors.toList());
+        return Buyable.of(buyableDrinks);
     }
 }

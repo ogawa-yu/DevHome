@@ -1,4 +1,4 @@
-package model.vending.message;
+package model.vending.coin;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -16,7 +16,15 @@ public class Money implements Serializable {
     }
 
     public Money difference(Money other) {
-        return Money.of(value - other.value);
+        if (this.value > other.value) {
+            return Money.of(this.value - other.value);
+        } else {
+            return Money.of(other.value - this.value);
+        }
+    }
+
+    public Currency toCurrency() {
+        return Currency.valueOf(this.value);
     }
 
     public int numberOfDifference(Money other) {

@@ -1,4 +1,4 @@
-package model.vending;
+package model.vending.drink;
 
 import java.util.Arrays;
 import java.util.List;

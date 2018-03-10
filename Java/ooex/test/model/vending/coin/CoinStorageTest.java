@@ -1,6 +1,5 @@
 package model.vending.coin;
 
-import model.vending.message.Money;
 import org.junit.Test;
 
 import java.util.List;
@@ -50,11 +49,18 @@ public class CoinStorageTest {
         assertTrue(testee.takeAll().isEmpty());
     }
 
-        @Test
+    @Test
     public void test_takeAll() {
         CoinStorage testee = new CoinStorage(5, Money.of(100));
         List<Money> actual = testee.takeAll();
         assertThat(actual.size(), is(5));
+    }
+
+    @Test
+    public void test_takeZero() {
+        CoinStorage testee = new CoinStorage(5, Money.of(100));
+        List<Money> actual = testee.take(0);
+        assertTrue(actual.isEmpty());
     }
 
     @Test
@@ -71,5 +77,37 @@ public class CoinStorageTest {
 
         testee.store(Money.of(200));
         assertTrue(testee.hasCoins(1));
+    }
+
+    @Test
+    public void test_getAllMoney() {
+        CoinStorage testee = new CoinStorage();
+
+        testee.store(Money.of(100));
+        testee.store(Money.of(100));
+        assertThat(testee.getAllMoney(), is(Money.of(200)));
+        assertTrue(testee.hasCoins(2));
+    }
+
+    @Test
+    public void test_takeAllMoney() {
+        CoinStorage testee = new CoinStorage();
+
+        testee.store(Money.of(100));
+        testee.store(Money.of(100));
+        assertThat(testee.takeAllMoney(), is(Money.of(200)));
+        assertTrue(testee.hasCoins(0));
+    }
+
+    @Test
+    public void test_find() {
+        CoinStorage testee = new CoinStorage();
+
+        testee.store(Money.of(50));
+        assertFalse(testee.find(Money.of(100)));
+
+        testee.store(Money.of(100));
+        assertFalse(testee.find(Money.of(150)));
+        assertTrue(testee.find(Money.of(100)));
     }
 }

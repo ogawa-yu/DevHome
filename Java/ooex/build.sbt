@@ -1,5 +1,3 @@
-import scala.collection.JavaConverters._
-
 name := """ooex"""
 organization := "org.ooex"
 
@@ -20,7 +18,7 @@ libraryDependencies ++= {
   Seq(
     guice,
     ehcache,
-    "com.typesafe.play" %% "play-json" % "2.6.1",
+    "com.typesafe.play" %% "play-json" % "2.6.",
     //angular2 dependencies
     "org.webjars.npm" % "angular__common" % ngVersion,
     "org.webjars.npm" % "angular__compiler" % ngVersion,
@@ -70,9 +68,3 @@ resolveFromWebjarsNodeModulesDir := true
   tslintEslintRulesDir.value,
   ng2LintRulesDir.value //codelyzer uses 'cssauron' which can't resolve 'through' see https://github.com/chrisdickinson/cssauron/pull/10
 ))
-
-// the naming conventions of our test files
-//jasmineFilter in jasmine := GlobFilter("*Test.js") | GlobFilter("*Spec.js") | GlobFilter("*.spec.js")
-//logLevel in jasmine := Level.Info
-logLevel in tslint := Level.Info
-logLevel in typescript := Level.Info

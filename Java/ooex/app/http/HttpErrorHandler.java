@@ -31,5 +31,4 @@ public class HttpErrorHandler extends DefaultHttpErrorHandler {
         Logger.error("Server Error:{}, ex:{}", request.uri(), exception);
         return super.onServerError(request, exception);
     }
-
 }

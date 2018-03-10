@@ -1,10 +1,9 @@
 package model.vending.coin;
 
-import model.vending.message.Money;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 class CoinStorage {
     private List<Money> storage_;
@@ -30,9 +29,10 @@ class CoinStorage {
         return storage_.remove(storage_.size() - 1);
     }
 
-    public Money take(int count) {
-        int value =  IntStream.range(0, count).map(i -> take().getValue()).sum();
-        return Money.of(value);
+    public List<Money> take(int count) {
+        return IntStream.range(0, count)
+                .mapToObj(i -> take())
+                .collect(Collectors.toList());
     }
 
     public List<Money> takeAll() {
@@ -41,8 +41,26 @@ class CoinStorage {
                 .collect(Collectors.toList());
     }
 
+    public boolean find(Money target) {
+        return storage_.stream()
+                .filter(m -> m.toCurrency() != null)
+                .anyMatch(m -> (target.getValue() <= m.getValue()));
+    }
+
+    public Money getAllMoney() {
+        return sum(storage_.stream());
+    }
+
+    public Money takeAllMoney() {
+        return sum(takeAll().stream());
+    }
+
+    private Money sum(Stream<Money> moneyStream) {
+        return Money.of(moneyStream.mapToInt(Money::getValue).sum());
+    }
+
     public void store(Money coin) {
-        if (coin.getValue() > 0) {
+        if (coin.isValid()) {
             storage_.add(coin);
         }
     }

@@ -18,9 +18,12 @@ export class VendingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*
     this.service.getDrinks()
-      .then(drinks => this.drinks = heroes.slice(1, 5));
-      */
+      .then(drinks => console.log(drinks));
+  }
+
+  buy(drink: Drink): void {
+    const link = ['/vending/buy', drink.type];
+    this.router.navigate(link);
   }
 }

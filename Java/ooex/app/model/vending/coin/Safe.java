@@ -1,7 +1,7 @@
 package model.vending.coin;
 
-import model.vending.message.Drink;
-import model.vending.message.Money;
+import model.vending.drink.Drink;
+import model.vending.message.Refunded;
 
 public class Safe {
     private SeparatedSafe bank_;
@@ -17,29 +17,33 @@ public class Safe {
     }
 
     public boolean available(Money amount) {
-        if (!bank_.hasStorage(amount)) {
-            return false;
-        }
-        return canRefund(amount);
+        return bank_.hasStorage(amount) && canRefund(amount);
     }
 
     private boolean canRefund(Money amount) {
         return amount.equals(JP_100_YEN) || bank_.canRefund(amount, JP_100_YEN);
     }
 
+    public boolean payoff(Drink drink) {
+        Money value = drink.getValue();
+        if (!paybackStorage_.find(value)){
+            return false;
+        }
+        Money amount = paybackStorage_.takeAllMoney();
+        bank_.take(value, amount).forEach(this::storeToPaybackable);
+        bank_.cache(value);
+        return true;
+    }
+
     public void storeToPaybackable(Money amount) {
         paybackStorage_.store(amount);
     }
 
-    public Refunded refund() {
-        return new Refunded(paybackStorage_.takeAll());
+    public Money getAmount() {
+        return paybackStorage_.getAllMoney();
     }
 
-    public Drink payoff(Drink drink, Money amount) {
-        Money drinkVaue = drink.getValue();
-        Money payback = bank_.take(drinkVaue, amount);
-        storeToPaybackable(payback);
-        bank_.cache(amount);
-        return drink;
+    public Refunded refund() {
+        return new Refunded(paybackStorage_.takeAll());
     }
 }

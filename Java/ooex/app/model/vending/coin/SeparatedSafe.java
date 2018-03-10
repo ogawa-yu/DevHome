@@ -1,8 +1,7 @@
 package model.vending.coin;
 
-import model.vending.message.Money;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class SeparatedSafe {
@@ -23,9 +22,9 @@ class SeparatedSafe {
         return storage_.containsKey(money);
     }
 
-    public boolean canRefund(Money amount, Money refundsCoin) {
-        CoinStorage refundCoins =  storage_.get(refundsCoin);
-        int paybackCount = amount.numberOfDifference(refundsCoin);
+    public boolean canRefund(Money amount, Money atomicValue) {
+        CoinStorage refundCoins =  storage_.get(atomicValue);
+        int paybackCount = amount.numberOfDifference(atomicValue);
         return refundCoins.hasCoins(paybackCount);
     }
 
@@ -37,9 +36,12 @@ class SeparatedSafe {
         coins.store(amount);
     }
 
-    public Money take(Money target, Money amount) {
+    public List<Money> take(Money target, Money amount) {
         CoinStorage coins = storage_.get(target);
-        int takeCount = amount.numberOfDifference(target);
-        return coins.take(takeCount);
+        int countOfPayoff = amount.numberOfDifference(target);
+        Money rest = amount.difference(target);
+        List<Money> take = coins.take(countOfPayoff);
+        take.add(rest);
+        return take;
     }
 }
