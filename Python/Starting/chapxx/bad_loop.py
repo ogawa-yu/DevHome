@@ -1,6 +1,8 @@
 from numpy import arange
+from numba import jit
 import time
 
+@jit
 def sum2d(arr):
     M, N = arr.shape
     result = 0.0
