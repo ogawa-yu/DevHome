@@ -16,13 +16,14 @@ class Sample(object):
 
     def __getattr__(self, name):
         value = 'Value for %s' % name
+
         setattr(self, name, value)
         
         return value
 
 
 class LoggingSample(Sample):
-    def __getattr_(self, name):
+    def __getattr__(self, name):
         print("Called getattr", name)
         return super().__getattr__(name)
 
@@ -32,5 +33,6 @@ if __name__ == '__main__':
     s.hoge = True
     print(s.hoge)
     print(s.foo)
+    print(s.bar)
 
 
