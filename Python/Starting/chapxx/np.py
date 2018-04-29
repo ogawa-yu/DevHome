@@ -72,7 +72,7 @@ class NumpyTest(ut.TestCase):
         coeffs = np.array([ [4, 5], [1, 2] ])
         dependents = np.array([ 20, 13 ], dtype=np.float)
         answers = np.linalg.solve(coeffs, dependents)
-        self.assertEqual(np.dot(coeffs, answers).tolist(), dependents.tolist())
+        self.assertTrue(np.allclose(np.dot(coeffs, answers), dependents))
 
 
 if __name__ == '__main__':
