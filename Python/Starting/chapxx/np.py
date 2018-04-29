@@ -70,11 +70,9 @@ class NumpyTest(ut.TestCase):
 
     def test_linear_arithmetic(self):
         coeffs = np.array([ [4, 5], [1, 2] ])
-        dependents = np.array([ 20, 13 ])
+        dependents = np.array([ 20, 13 ], dtype=np.float)
         answers = np.linalg.solve(coeffs, dependents)
-
-        self.assertEqual((coeffs[0][0] * answers[0] + coeffs[0][1] * answers[1]), dependents[0])
-        self.assertEqual((coeffs[1][0] * answers[0] + coeffs[1][1] * answers[1]), dependents[1])
+        self.assertEqual(np.dot(coeffs, answers).tolist(), dependents.tolist())
 
 
 if __name__ == '__main__':
