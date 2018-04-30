@@ -4,20 +4,21 @@ import time
 
 random.seed()
 
-EPSILON = 0.3
-LEARN_RATE = 0.5
-DISCOUNT_RATE = 0.95
+EPSILON = 1.0
+LEARN_RATE = 0.1
+DISCOUNT_RATE = 0.9
 ACTION_SELECTIVITY = 2
 
 
 class Agent(object):
     
-    def __init__(self, num_train, limit, state_count):
+    def __init__(self, num_train, limit, state_count, learn_rate_func):
         self._num_train = num_train
         self._limit = limit
         self._state_count = state_count
         self._state = self._initial_state()
         self._reward = {0: -10, 5: 10}
+        self._learn_rate_func = learn_rate_func
         self._q = [
             [random.random() for _ in range(ACTION_SELECTIVITY)]
             for _ in range(state_count)
@@ -40,21 +41,17 @@ class Agent(object):
         if action:
             return current_state + 1
         return current_state - 1
-    
-    def _decide_action(self):
-        state = self._state
-        action = self._select_action(state)
-        self._state = self._transition(action)
 
-    def _update_qvalue(self, action):
+    def _update_qvalue(self, action, i):
         state, next_state = self._state
         Q = self._q
+        learn_rate = self._learn_rate_func(i)
         if next_state in [0, 5]:
             reward = self._reward[next_state]
-            return Q[state][action] + LEARN_RATE * (reward - Q[state][action])
+            return Q[state][action] + learn_rate * (reward - Q[state][action])
 
         next_action = self._selet_forcibly(next_state)
-        return Q[state][action] + LEARN_RATE \
+        return Q[state][action] + learn_rate \
             * (DISCOUNT_RATE * Q[next_state][next_action] - Q[state][action])
 
     def _get_symbol(self):
@@ -94,8 +91,8 @@ class Agent(object):
                 self._state[1] = self._transition(action)
 
                 self._console(i+1, t)
-                
-                self._q[state][action] = self._update_qvalue(action)
+
+                self._q[state][action] = self._update_qvalue(action, i)
 
                 self._state[0] = self._state[1]
 
@@ -113,5 +110,5 @@ if __name__ == '__main__':
     parser.add_argument('--limit', '-l', type=int, default=10,
                         help='Limit.')
     args = parser.parse_args()
-    agent = Agent(args.num_train, args.limit, 6)
+    agent = Agent(args.num_train, args.limit, 6, lambda x: 1/(x+1))
     agent.train()
