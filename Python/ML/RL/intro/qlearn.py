@@ -4,7 +4,6 @@ import time
 
 random.seed()
 
-EPSILON = 0.3
 LEARN_RATE = 0.1
 DISCOUNT_RATE = 0.9
 ACTION_SELECTIVITY = 2
@@ -12,13 +11,14 @@ ACTION_SELECTIVITY = 2
 
 class Agent(object):
     
-    def __init__(self, num_train, limit, state_count, learn_rate_func):
+    def __init__(self, num_train, limit, epsilon, state_count, step_algo):
         self._num_train = num_train
         self._limit = limit
+        self._epsilon = epsilon
         self._state_count = state_count
         self._state = self._initial_state()
         self._reward = {0: -10, 5: 10}
-        self._learn_rate_func = learn_rate_func
+        self._learn_rate_func = self._create_step_update_func(step_algo)
         self._q = [
             [random.random() for _ in range(ACTION_SELECTIVITY)]
             for _ in range(state_count)
@@ -27,8 +27,14 @@ class Agent(object):
     def _initial_state(self):
         return [ACTION_SELECTIVITY, 2]
 
+    def _create_step_update_func(self, step_algo):
+        if args.stepalgo == 'const':
+            return lambda x: LEARN_RATE
+        else:
+            return lambda x: 1/(x+1)
+
     def _select_action(self, state):
-        if random.random() < EPSILON:
+        if random.random() < self._epsilon:
             return random.randrange(ACTION_SELECTIVITY)
         return self._selet_forcibly(state)
 
@@ -109,6 +115,11 @@ if __name__ == '__main__':
                         help='Number of training')
     parser.add_argument('--limit', '-l', type=int, default=10,
                         help='Limit.')
+    parser.add_argument('--epsilon', '-e', type=float, default=0.3,
+                        help='Epsilon rate')
+    parser.add_argument('--stepalgo', '-a', type=str, default='const',
+                        help='Step updating function.')
     args = parser.parse_args()
-    agent = Agent(args.num_train, args.limit, 6, lambda x: 1/(x+1))
+
+    agent = Agent(args.num_train, args.limit, args.epsilon, 6, args.stepalgo)
     agent.train()
