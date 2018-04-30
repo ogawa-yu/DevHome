@@ -4,7 +4,7 @@ import time
 
 random.seed()
 
-EPSILON = 1.0
+EPSILON = 0.3
 LEARN_RATE = 0.1
 DISCOUNT_RATE = 0.9
 ACTION_SELECTIVITY = 2
@@ -58,7 +58,7 @@ class Agent(object):
         symbol = self._state[0]
         items = []
         for i in range(self._state_count):
-            if symbol == 1:
+            if symbol == i:
                 if i not in [0, 5]:
                     items.append("o")
                 elif i == 0:
