@@ -28,21 +28,35 @@ class Sample2(metaclass=SampleMeta):
         print("init", self.__class__)
 
 
+class Sample3(Sample2):
+    def __init__(self):
+        print("init sample 3")
+
+    def hoge(self):
+        pass
+
+
 if __name__ == '__main__':
     s1 = Sample()
     ss = Sample()
     s2 = Sample2()
+    s3 = Sample3()
     print([m for m in dir(s1) if not m.startswith('__')])
     print([m for m in dir(s2) if not m.startswith('__')])
+    print([m for m in dir(s3) if not m.startswith('__')])
     print(s1.uses_metaclass())
+
 
 """ Outputs:
 init metaclass Sample
 init metaclass Sample2
+init metaclass Sample3
 init <class '__main__.Sample'>
 init <class '__main__.Sample'>
 init <class '__main__.Sample2'>
+init sample 3
 ['bar', 'foo', 'uses_metaclass']
 ['uses_metaclass']
+['hoge', 'uses_metaclass']
 Yes!
 """
