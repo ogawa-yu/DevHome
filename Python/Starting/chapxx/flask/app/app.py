@@ -5,6 +5,9 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['RUNTIME_DATA'] = dict()
+app.config['HOST'] = 'localhost'
+app.config['PORT'] = '5010'
+app.config['SERVER_NAME'] = '{}:{}'.format(app.config['HOST'], app.config['PORT'])
 app.register_blueprint(hello.api)
 app.register_blueprint(hello.views)
 CORS(app)
@@ -19,5 +22,8 @@ def teardown():
 
 if __name__ == '__main__':
     atexit.register(teardown)
-    app.run(threaded=True)
+    app.run(
+        host=app.config['HOST'],
+        port=app.config['PORT'],
+        threaded=True)
 
