@@ -1,13 +1,14 @@
-// The Play plugin
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.11")
 
 resolvers ++= Seq(
-  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
+  Classpaths.typesafeReleases,
   "Webjars relabel" at "https://dl.bintray.com/envisia/maven",
   "Webjars" at "http://dl.bintray.com/webjars/maven",
   Resolver.bintrayRepo("webjars","maven"),
   Resolver.jcenterRepo
 )
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0-RC1")
 
 // provides server side compilation of typescript to ecmascript 5 or 3
 addSbtPlugin("name.de-vries" % "sbt-typescript" % "2.6.2")

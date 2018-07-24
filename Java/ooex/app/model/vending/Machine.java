@@ -1,78 +1,48 @@
 package model.vending;
 
 import akka.actor.AbstractActor;
+import model.vending.coin.Safe;
+import model.vending.drink.DrinkHolder;
+import model.vending.drink.DrinkKind;
+import model.vending.drink.DrinkServer;
+import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
-import model.vending.message.Drink;
+import model.vending.message.Buyable;
+import model.vending.drink.Drink;
+import model.vending.coin.Money;
+import model.vending.message.Pay;
 import model.vending.message.Refund;
-import model.vending.message.Value;
+
+import java.util.Collections;
 
 public class Machine extends AbstractActor {
-    int quantityOfCoke = 5; // コーラの在庫数
-    int quantityOfDietCoke = 5; // ダイエットコーラの在庫数
-    int quantityOfTea = 5; // お茶の在庫数
-    int numberOf100Yen = 10; // 100円玉の在庫
-    int charge = 0; // お釣り
-
-    /**
-     * ジュースを購入する.
-     *
-     * @param i           投入金額. 100円と500円のみ受け付ける.
-     * @param kindOfDrink ジュースの種類.
-     *                    コーラ({@code Juice.COKE}),ダイエットコーラ({@code Juice.DIET_COKE},お茶({@code Juice.TEA})が指定できる.
-     * @return 指定したジュース. 在庫不足や釣り銭不足で買えなかった場合は {@code null} が返される.
-     */
-    public Drink buy(int i, int kindOfDrink) {
-        // 100円と500円だけ受け付ける
-        if ((i != 100) && (i != 500)) {
-            charge += i;
-            return null;
-        }
-
-        if ((kindOfDrink == Drink.COKE) && (quantityOfCoke == 0)) {
-            charge += i;
-            return null;
-        } else if ((kindOfDrink == Drink.DIET_COKE) && (quantityOfDietCoke == 0)) {
-            charge += i;
-            return null;
-        } else if ((kindOfDrink == Drink.TEA) && (quantityOfTea == 0)) {
-            charge += i;
-            return null;
-        }
-
-        // 釣り銭不足
-        if (i == 500 && numberOf100Yen < 4) {
-            charge += i;
-            return null;
-        }
-
-        if (i == 100) {
-            // 100円玉を釣り銭に使える
-            numberOf100Yen++;
-        } else if (i == 500) {
-            // 400円のお釣り
-            charge += (i - 100);
-            // 100円玉を釣り銭に使える
-            numberOf100Yen -= (i - 100) / 100;
-        }
-
-        if (kindOfDrink == Drink.COKE) {
-            quantityOfCoke--;
-        } else if (kindOfDrink == Drink.DIET_COKE) {
-            quantityOfDietCoke--;
-        } else {
-            quantityOfTea--;
-        }
-
-        return new Drink(kindOfDrink);
-    }
+    private final DrinkServer storage_ = new DrinkServer();
+    private final Safe safe_ = new Safe();
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(Buy.class, msg -> {
-            sender().tell(buy(msg.getDiscount(), msg.getDrinkType()), self());
-        }).match(Refund.class, msg -> {
-            sender().tell(Value.of(charge), self());
-            charge = 0;
-        }).build();
+        return receiveBuilder().match(AllDrinks.class, msg ->
+            sender().tell(DrinkKind.valueList(), self())
+        ).match(Pay.class,    msg -> sender().tell(handle(msg.getAmount()), self())
+        ).match(Buy.class,    msg -> sender().tell(handle(msg.getDrinkType()), self())
+        ).match(Refund.class, msg -> sender().tell(safe_.refund(), self())
+        ).build();
+    }
+
+    private Buyable handle(Money amount) {
+        safe_.storeToPaybackable(amount);
+        if (!safe_.available(amount)) {
+            return Buyable.of(Collections.emptyList());
+        }
+        return storage_.buyable(safe_.getAmount());
+    }
+
+    private Drink handle(DrinkKind kindOfDrink) {
+        DrinkHolder holder = storage_.select(kindOfDrink);
+        Drink drink = holder.take();
+        if (!safe_.payoff(drink)) {
+            return Drink.empty();
+        }
+        return drink;
     }
 }

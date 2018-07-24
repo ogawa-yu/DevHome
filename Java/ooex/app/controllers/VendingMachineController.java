@@ -2,46 +2,49 @@ package controllers;
 
 import akka.actor.ActorRef;
 import akka.pattern.Patterns;
-import akka.util.Timeout;
-import javax.inject.Inject;
-import javax.inject.Named;
+import model.vending.coin.Money;
+import model.vending.drink.DrinkKind;
+import model.vending.message.AllDrinks;
 import model.vending.message.Buy;
-import model.vending.message.Drink;
+import model.vending.message.Pay;
 import model.vending.message.Refund;
-import model.vending.message.Value;
 import modules.ActorModule;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import scala.concurrent.Await;
-import scala.concurrent.duration.Duration;
-import scala.concurrent.duration.FiniteDuration;
-import scala.reflect.ClassTag;
+import scala.compat.java8.FutureConverters;
 
-import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.concurrent.CompletionStage;
 
-public class VendingMachineController extends Controller{
-
-    @Inject @Named(ActorModule.VENDING_MACHINE_ACTOR)
+public class VendingMachineController extends Controller {
     private ActorRef vendingMachine_;
-
-    public Result buy(int discount, int type) throws Exception {
-        return ok(Json.toJson(wait(Drink.class, new Buy(type, discount))));
+    private static final long TIMEOUT = 1000;
+    @Inject
+    public VendingMachineController(@Named(ActorModule.VENDING_MACHINE_ACTOR) ActorRef actor) {
+        vendingMachine_ = actor;
     }
 
-    public Result refund() throws Exception {
-        return ok(Json.toJson(wait(Value.class, new Refund())));
+    public CompletionStage<Result> allDrinks() {
+        return handleMessage(new AllDrinks());
     }
 
-    private Object wait(Class<?> clazz, Object message) throws Exception {
-        FiniteDuration duration = Duration.create(5, TimeUnit.SECONDS);
-        return Await.result(
-                Patterns.ask(vendingMachine_, message, new Timeout(duration))
-                        .mapTo(new ClassTag<Drink>() {
-                            @Override
-                            public Class<?> runtimeClass() {
-                                return clazz;
-                            }}),
-                duration);
+    public CompletionStage<Result> pay(int amount) {
+        return handleMessage(Pay.of(Money.of(amount)));
+    }
+
+    public CompletionStage<Result> buy(int kind) {
+        return handleMessage(Buy.of(DrinkKind.fromType(kind)));
+    }
+
+    public CompletionStage<Result> refund() {
+        return handleMessage(new Refund());
+    }
+
+    private <T> CompletionStage<Result> handleMessage(T message) {
+        return FutureConverters.toJava(
+                Patterns.ask(vendingMachine_, message, TIMEOUT))
+                .thenApply(response -> ok(Json.toJson(response)));
     }
 }

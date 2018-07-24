@@ -13,8 +13,6 @@ public class ActorModule extends AbstractModule implements AkkaGuiceSupport {
 
     @Override
     public void configure() {
-        bindActor(Machine.class,
-                VENDING_MACHINE_ACTOR,
-                p -> new RoundRobinPool(5).props(p));
+        bindActor(Machine.class, VENDING_MACHINE_ACTOR, p -> new RoundRobinPool(1).props(p));
     }
 }

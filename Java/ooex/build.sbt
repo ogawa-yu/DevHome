@@ -37,18 +37,18 @@ libraryDependencies ++= {
     "org.webjars.npm" % "typescript" % "2.7.1",
     "org.webjars.npm" % "react" % "15.4.0",
     "org.webjars.npm" % "types__react" % "15.0.34",
-
+    //lombok
+    "org.projectlombok" % "lombok" % "1.16.16",
     //tslint dependency
     "org.webjars.npm" % "tslint-eslint-rules" % "3.4.0",
     "org.webjars.npm" % "tslint-microsoft-contrib" % "4.0.0",
     //"org.webjars.npm" % "codelyzer" % "3.1.1", see below
     "org.webjars.npm" % "types__jasmine" % "2.5.53" % "test",
     //test
-    "org.webjars.npm" % "jasmine-core" % "2.6.4"
-
-    //"org.webjars" % "requirejs" % "2.2.0",
-    //"org.webjars" % "jquery" % "2.1.1",
-    //"org.webjars" % "bootstrap" % "3.1.1-1"
+    "org.webjars.npm" % "jasmine-core" % "2.6.4",
+    "com.typesafe.akka" %% "akka-testkit" % "2.5.8" % "test",
+    "junit" % "junit" % "4.12" % "test",
+    "com.novocode" % "junit-interface" % "0.11" % "test"
   )
 }
 dependencyOverrides ++= Seq(
@@ -68,9 +68,3 @@ resolveFromWebjarsNodeModulesDir := true
   tslintEslintRulesDir.value,
   ng2LintRulesDir.value //codelyzer uses 'cssauron' which can't resolve 'through' see https://github.com/chrisdickinson/cssauron/pull/10
 ))
-
-// the naming conventions of our test files
-//jasmineFilter in jasmine := GlobFilter("*Test.js") | GlobFilter("*Spec.js") | GlobFilter("*.spec.js")
-//logLevel in jasmine := Level.Info
-logLevel in tslint := Level.Info
-logLevel in typescript := Level.Info

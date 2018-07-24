@@ -1,12 +1,11 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 
-GET     /vending/buy                controllers.VendingMachineController.buy(type: Int, discount: Int)
-GET     /vending/refund             controllers.VendingMachineController.refund
+GET     /vending/drink                controllers.VendingMachineController.allDrinks
+POST    /vending/drink/:kind          controllers.VendingMachineController.buy(kind: Integer)
+POST    /vending/money/:amount        controllers.VendingMachineController.pay(amount: Integer)
+GET     /vending/money                controllers.VendingMachineController.refund
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
