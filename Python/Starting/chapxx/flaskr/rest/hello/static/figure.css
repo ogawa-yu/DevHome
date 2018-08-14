@@ -1,0 +1,19 @@
+table
+{
+  border-collapse: collapse;
+}
+th
+{
+  color: #ffffff;
+  background-color:rgba(0, 0, 0, 0.8)
+}
+td
+{
+  background-color:rgba(208, 208, 208, 0.8)
+}
+table, th, td
+{
+  font-family:Calibri;
+  border: 1px solid red;
+  text-align: right;
+}
