@@ -1,9 +1,12 @@
 from flask_restplus import Namespace, fields, Resource
+from models import ToDo
+
 
 todo_namespace = Namespace('todo', description='Endpoint ToDo')
 
+
 todo = todo_namespace.model('ToDo', {
-    'user_id': fileds.Integer(
+    'user_id': fields.Integer(
         required=True,
         description="ToDoを登録したユーザID",
         example='0'
@@ -24,4 +27,14 @@ todo = todo_namespace.model('ToDo', {
         example='AM7時に起きたい'
     )
 })
+
+@todo_namespace.route('/')
+class ToDoList(Resource):
+    @todo_namespace.marshal_list_with(todo)
+    def get(self):
+        """
+        一覧取得
+        """
+        return ToDo.query.all()
+
 
