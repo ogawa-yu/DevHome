@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
     <h1>{{title}}</h1>
     <div class="header-bar"></div>
     <nav>
-      <a routerLink="/vending/buy" routerLinkActive="active">Buy</a>
-      <a routerLink="/vending/buy" routerLinkActive="active">Refund</a>
+      <a routerLink="/vending/drink" routerLinkActive="active">Buy</a>
+      <a routerLink="/vending/money" routerLinkActive="active">Refund</a>
     </nav>
     <router-outlet></router-outlet>
   `,

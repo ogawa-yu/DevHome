@@ -3,9 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { VendingComponent } from './vending/component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/vending', pathMatch: 'full' },
   { path: 'vending', component: VendingComponent },
-  { path: 'vending/buy/:type', component: VendingComponent }
+  { path: 'vending/drink/:kind', component: VendingComponent }
 ];
 
 @NgModule({

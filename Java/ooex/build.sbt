@@ -57,11 +57,10 @@ dependencyOverrides ++= Seq(
 )
 
 //pipelineStages := Seq(rjs)
-
 resolveFromWebjarsNodeModulesDir := true
-
-// compile our tests as commonjs instead of systemjs modules
 (projectTestFile in typescript) := Some("tsconfig.test.json")
+
+tsCodesToIgnore := List(canNotFindModule)
 
 // use the combined tslint and eslint rules plus ng2 lint rules
 (rulesDirectories in tslint) := Some(List(

@@ -22,8 +22,13 @@ export class VendingComponent implements OnInit {
       .then(drinks => console.log(drinks));
   }
 
-  buy(drink: Drink): void {
-    const link = ['/vending/buy', drink.type];
+  drink(drink: Drink): void {
+    const link = ['/vending/drink', drink.type];
+    this.router.navigate(link);
+  }
+
+  money(money: number): void {
+    const link = ['/vending/money'];
     this.router.navigate(link);
   }
 }
