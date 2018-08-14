@@ -1,9 +1,17 @@
 from flask_restplus import Namespace, fields, Resource
 from models import ToDo
+from enum import Enum
 
 
 todo_namespace = Namespace('todo', description='Endpoint ToDo')
 
+def enum(enum):
+    return [n for n, _ in enum.__members__.items()]     
+
+class Priority(Enum):
+    High = 1
+    Middle = 2
+    Low = 3
 
 todo = todo_namespace.model('ToDo', {
     'user_id': fields.Integer(
@@ -25,6 +33,12 @@ todo = todo_namespace.model('ToDo', {
         required=True,
         description='ToDoの詳細',
         example='AM7時に起きたい'
+    ),
+    'type': fields.String(
+        required=True,
+        description="ToDoの種別",
+        enum=enum(Priority),
+        example="low"
     )
 })
 
