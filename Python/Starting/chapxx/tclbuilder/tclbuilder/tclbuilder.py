@@ -45,9 +45,10 @@ class TclBuilder(object):
 
     @staticmethod
     def define_tcl_list(key, values):
-        return "set {} [list {}]".format( 
+        return "set {} {}".format( 
             key, TclBuilder.to_tcl_list(values))
 
     @staticmethod
     def to_tcl_list(values):
-        return reduce(lambda l, r: str(l) + " " + str(r), values)
+        return "[list {}]".format(
+            reduce(lambda l, r: str(l) + " " + str(r), values))

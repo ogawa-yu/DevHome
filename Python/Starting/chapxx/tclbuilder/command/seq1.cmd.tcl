@@ -1,12 +1,12 @@
-set materials [list %materials%]
+set materials %materials%
 
-set param1_attr1s [list %materials.param1.attr1%]
+set param1_attr1s %materials.param1.attr1%
 
-set param1_attr2s [list %materials.param1.attr2%]
+set param1_attr2s %materials.param1.attr2%
 
-set param2_attr1s [list %materials.param2.attr1%]
+set param2_attr1s %materials.param2.attr1%
 
-set param2_attr2s [list %materials.param2.attr2%]
+set param2_attr2s %materials.param2.attr2%
 
 foreach m $materials p1a1 $param1_attr1s p1a2 $param1_attr2s {
     set l [join [list $m ":" $p1a1 "," $p1a2]]

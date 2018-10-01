@@ -12,10 +12,10 @@ class TestTclBuilder(object):
                 "type": "seq1",
                 "materials": ["/org/", "/sil/", "/ox/"],
                 "param1": 100,
-                "materials.param1.attr1": [1, 0, 1],
-                "materials.param1.attr2": [2, 0, 0],
-                "materials.param2.attr1": [3, 0, 0],
-                "materials.param2.attr2": [4, 0, 0]
+                "materials.param1.attr1": [1, 4, 10],
+                "materials.param1.attr2": [2, 3, 20],
+                "materials.param2.attr1": [3, 2, 30],
+                "materials.param2.attr2": [4, 1, 40]
             }
         }
 
@@ -26,13 +26,13 @@ class TestTclBuilder(object):
         expected = [
             "set materials [list /org/ /sil/ /ox/]",
             "",
-            "set param1_attr1s [list 1 0 1]",
+            "set param1_attr1s [list 1 4 10]",
             "",
-            "set param1_attr2s [list 2 0 0]",
+            "set param1_attr2s [list 2 3 20]",
             "",
-            "set param2_attr1s [list 3 0 0]",
+            "set param2_attr1s [list 3 2 30]",
             "",
-            "set param2_attr2s [list 4 0 0]",
+            "set param2_attr2s [list 4 1 40]",
             "",
             "foreach m $materials p1a1 $param1_attr1s p1a2 $param1_attr2s {",
             "    set l [join [list $m \":\" $p1a1 \",\" $p1a2]]",
