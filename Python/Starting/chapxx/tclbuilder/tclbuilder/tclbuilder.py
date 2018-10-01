@@ -39,7 +39,7 @@ class TclBuilder(object):
             if isinstance(value, list):
                 value_str = TclBuilder.to_tcl_list(value)
             else:
-                value_str = str(params[key])
+                value_str = str(value)
             lines.append(re.sub(key, value_str, line))
         return lines
 

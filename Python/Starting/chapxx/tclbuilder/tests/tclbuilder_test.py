@@ -22,7 +22,7 @@ class TestTclBuilder(object):
     def test_build(self, input):
         testee = TclBuilder()
         actual = testee.build(input)
-        actual = list(map(lambda l: l[:-1], actual)) # remove \n
+        actual = list(map(lambda l: l[:-1] if l.endswith("\n") else l, actual)) # remove \n
         expected = [
             "set materials [list /org/ /sil/ /ox/]",
             "",
@@ -34,10 +34,19 @@ class TestTclBuilder(object):
             "",
             "set param2_attr2s [list 4 0 0]",
             "",
-            "puts $param1_attr1s",
-            "puts $param1_attr2s",
-            "puts $param2_attr1s",
-            "puts $param2_attr2s"
+            "foreach m $materials p1a1 $param1_attr1s p1a2 $param1_attr2s {",
+            "    set l [list $m \":\" $p1a1 \",\" $p1a2]",
+            "    puts $l",
+            "    unset l",
+            "}",
+            "",
+            "foreach mo $materials p2a1 $param2_attr1s {",
+            "    foreach mi $materials p2a2 $param2_attr2s {",
+            "        set m_prod [list $mo \"+\" $mi \"+\" $p2a1 \"=\" $mi \"+\" $mo \"+\" $p2a2]",
+            "        puts $m_prod",
+            "        unset m_prod",
+            "    }",
+            "}"
         ]
         print("A", actual)
         assert actual == expected
