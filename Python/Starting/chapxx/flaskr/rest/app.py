@@ -17,7 +17,7 @@ app.config['RESTPLUS_VALIDATE'] = settings.RESTPLUS_VALIDATE
 
 app.register_blueprint(hello.api)
 app.register_blueprint(hello.views)
-api.init_app(app)
+#api.init_app(app)
 
 CORS(app)
 

@@ -1,3 +1,7 @@
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
 
 
 class ToDoQuery(object):
@@ -10,4 +14,13 @@ class ToDoQuery(object):
 
 class ToDo(object):
     query = ToDoQuery()
+
+
+class Word(db.Model):
+    __tablename__ = 'word'
+    id = db.Column(db.Integer, nullable=False)
+    word = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    examlpe = db.Column(db.Text, nullable=False)
+
 
