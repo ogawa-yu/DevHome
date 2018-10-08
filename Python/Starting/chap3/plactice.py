@@ -31,7 +31,7 @@ class TestPractice(unittest.TestCase):
         # [3-9] surpriseリストの最後の要素を小文字にして、逆順にしてから先頭文字を大文字に戻せ
         surprise[2] = surprise[2].lower()
         self.assertEqual(surprise, ['Groucho', 'Chico', 'harpo'])
-        surprise.reverse();
+        surprise.reverse()
         self.assertEqual(surprise, ['harpo', 'Chico', 'Groucho'])
         surprise[0] = surprise[0].capitalize()
         self.assertEqual(surprise, ['Harpo', 'Chico', 'Groucho'])
@@ -71,7 +71,6 @@ class TestPractice(unittest.TestCase):
         self.assertEqual(life['animals']['cats'], ['Henri', 'Grumpy', 'Lucy'])
         # [3-16]
         self.assertEqual(life.keys(), {'animals', 'plants', 'other'})
-
 
 
 if __name__ == '__main__':
