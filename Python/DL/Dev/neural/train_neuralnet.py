@@ -8,7 +8,7 @@ train_acc_list  = []
 test_acc_list   = []
 
 #Hyper-Parameters
-items_num    = 10000
+items_num    = 10
 train_size   = x_train.shape[0]
 batch_size   = 100
 lerning_rate = 0.1
@@ -34,7 +34,7 @@ for i in range(items_num):
     loss = network.loss(x_batch, t_batch)
     train_loss_list.append(loss)
 
-    if (iter_per_epoch % i == 0):
+    if (iter_per_epoch % (i+1) == 0):
         train_acc = network.accuracy(x_train, t_train)
         test_acc  = network.accuracy(x_test,  t_test)
         train_acc_list.append(train_acc)

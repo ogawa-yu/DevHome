@@ -2,6 +2,8 @@ import numpy as np
 from sigmoid import sigmoid
 from identity import identity_function
 from softmax import softmax
+
+
 def init_network():
     network = {}
     network['W1'] = np.array([[0.1, 0.3, 0.5], [0.2, 0.4, 0.6]]) 
