@@ -1,4 +1,3 @@
 flask
 flask-restplus
-flask-sqlalchemy
-pymysql
+flask-pymongo

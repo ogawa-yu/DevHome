@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  restapi:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DB_URL: "mongodb://localhost:27017/restdb"
+      PYTHONPATH: "/usr/src/app"
+    links:
+      - mongo:mongo
+    entrypoint:
+      - dockerize
+      - -timeout
+      - 10s
+      - -wait
+      - tcp://mongodb:27017
+    command: python /usr/src/app/rest_api/app.py
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - 'MONGODB_USER=user'
+      - 'MONGODB_PASSWORD=password'
+    volumes:
+      - 'data:/data/db'
+    ports:
+      - '27017:27017'
+    command: mongod --smallfiles
+  mongo-express:
+    environment:
+      - 'ME_CONFIG_OPTIONS_EDITORTHEME=ambiance'
+      - 'ME_CONFIG_BASICAUTH_USERNAME=user'
+      - 'ME_CONFIG_BASICAUTH_PASSWORD=password'
+    image: mongo-express
+    container_name: mongo-express
+    links:
+      - mongo:mongo
+    ports:
+      - '8081:8081'
+  
+volumes:
+  data: {}
