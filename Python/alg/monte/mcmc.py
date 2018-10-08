@@ -1,5 +1,5 @@
 """
-    train MCMC(malcov chain monte calro method)
+    train MCMC(malcov chain monte carlo method)
 """
 import random
 import numpy as np
